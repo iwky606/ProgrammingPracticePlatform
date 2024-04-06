@@ -1,6 +1,7 @@
 package com.oneq.programmingpracticeplatform.mapper;
 
 import com.oneq.programmingpracticeplatform.model.entity.User;
+import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -13,4 +14,6 @@ public interface UserMapper {
 
     @Select("SELECT * FROM users WHERE username=#{username} AND password=#{password}")
     User queryUserPassword(String username, String password);
+
+    int updateUserAuth(String username, AuthEnum auth);
 }

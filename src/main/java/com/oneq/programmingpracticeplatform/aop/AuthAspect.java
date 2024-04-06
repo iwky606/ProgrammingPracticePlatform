@@ -25,8 +25,8 @@ public class AuthAspect {
 
     @Around("@annotation(authCheck)")
     public Object doInterceptor(ProceedingJoinPoint joinPoint, AuthCheck authCheck) throws Throwable {
-        int mustRole = authCheck.mustRole();
-        if (mustRole == 0) {
+        AuthEnum mustRole = authCheck.mustRole();
+        if (mustRole == null) {
             // 装饰器使用错误
             throw new RuntimeException();
         }
@@ -36,14 +36,16 @@ public class AuthAspect {
 
         // 当前登录用户
         UserVo loginUser = userService.getLoginUser(request);
+        if (loginUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
 
         // admin所有的权限都通过
         if (loginUser.getAuth().equals(AuthEnum.ADMIN)) {
             return joinPoint.proceed();
         }
 
-        AuthEnum needAuth = AuthEnum.getEnumByValue(mustRole);
-        if (loginUser.getAuth().equals(needAuth)) {
+        if (loginUser.getAuth().equals(mustRole)) {
             return joinPoint.proceed();
         }
 

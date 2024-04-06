@@ -1,5 +1,6 @@
 package com.oneq.programmingpracticeplatform.controller;
 
+import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
@@ -7,6 +8,7 @@ import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.UserMapper;
 import com.oneq.programmingpracticeplatform.model.dto.user.UserLoginRequest;
 import com.oneq.programmingpracticeplatform.model.dto.user.UserRegisterRequest;
+import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,5 +49,16 @@ public class UserController {
         }
         UserVo userVo = userService.login(userLoginRequest.getUsername(), userLoginRequest.getPassword(), request);
         return ResultUtils.success(userVo);
+    }
+
+    @PostMapping("/grantAuth")
+    @AuthCheck(mustRole = AuthEnum.ADMIN)
+    public BaseResponse<String> grantAuth(String username, int auth) {
+        if (StringUtils.isAnyBlank(username) || AuthEnum.getEnumByValue(auth) == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        userService.updateUserAuth(username, AuthEnum.getEnumByValue(auth));
+
+        return ResultUtils.success("修改成功");
     }
 }

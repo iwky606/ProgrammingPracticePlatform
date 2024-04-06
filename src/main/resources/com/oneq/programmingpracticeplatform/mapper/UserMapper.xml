@@ -16,5 +16,8 @@
         INSERT INTO users (id, username, password, auth, create_time, update_time)
         VALUES (#{id}, #{username}, #{password}, #{auth}, #{createTime}, #{updateTime})
     </insert>
+    <update id="updateUserAuth">
+        UPDATE users SET auth=#{auth} WHERE username=#{username};
+    </update>
 
 </mapper>

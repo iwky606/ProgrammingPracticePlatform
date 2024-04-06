@@ -9,7 +9,6 @@ import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -29,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private static final String SALT = "oneqxowikdj.";
 
     @Override
-    public boolean userRegister(String username, String password, String checkPassword, int auth) {
+    public void userRegister(String username, String password, String checkPassword, int auth) {
         if (auth <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户权限为空");
         }
@@ -66,7 +65,6 @@ public class UserServiceImpl implements UserService {
             if (rows == 0) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
             }
-            return true;
         }
     }
 
@@ -94,7 +92,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean updateUserAuth(String username, AuthEnum auth) {
-        return false;
+    public void updateUserAuth(String username, AuthEnum auth) {
+        int num = userMapper.updateUserAuth(username, auth);
+        if (num == 0) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "修改失败，用户不存在");
+        }
     }
 }

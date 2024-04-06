@@ -13,16 +13,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.oneq.programmingpracticeplatform.constant.UserConstant.USER_LOGIN_STATE;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
+    @Resource
     UserMapper userMapper;
 
-    @Autowired
+    @Resource
     Snowflake snowflake;
 
     private static final String SALT = "oneqxowikdj.";
@@ -79,7 +80,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "用户名密码不匹配");
         }
-        UserVo userVo = null;
+        UserVo userVo = new UserVo();
         userVo.setAuth(user.getAuth());
         userVo.setUsername(user.getUsername());
         request.getSession().setAttribute(USER_LOGIN_STATE, userVo);

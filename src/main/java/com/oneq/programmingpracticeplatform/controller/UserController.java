@@ -14,13 +14,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
 @Slf4j
 public class UserController {
-    @Autowired
+    @Resource
     UserService userService;
 
     @PostMapping("/register")

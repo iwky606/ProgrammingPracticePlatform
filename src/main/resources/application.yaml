@@ -1,0 +1,16 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: ProgrammingPracticePlatform
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    url: jdbc:mysql://59.110.155.175:3306/pppdb?serverTimezone=UTC
+    username: root
+    password: wky926996
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

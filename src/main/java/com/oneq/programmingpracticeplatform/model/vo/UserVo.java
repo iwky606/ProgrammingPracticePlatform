@@ -1,9 +1,10 @@
 package com.oneq.programmingpracticeplatform.model.vo;
 
+import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import lombok.Data;
 
 @Data
 public class UserVo {
     private String username;
-    private int auth;
+    private AuthEnum auth;
 }

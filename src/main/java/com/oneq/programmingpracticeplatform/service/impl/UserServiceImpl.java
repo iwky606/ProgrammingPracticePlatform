@@ -6,11 +6,16 @@ import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.UserMapper;
 import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
+import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+
+import javax.servlet.http.HttpServletRequest;
+
+import static com.oneq.programmingpracticeplatform.constant.UserConstant.USER_LOGIN_STATE;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,22 +28,22 @@ public class UserServiceImpl implements UserService {
     private static final String SALT = "oneqxowikdj.";
 
     @Override
-    public boolean userRegister(String username, String userPassword, String checkPassword, int auth) {
+    public boolean userRegister(String username, String password, String checkPassword, int auth) {
         if (auth <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户权限为空");
         }
         // 1. 校验
-        if (StringUtils.isAnyBlank(username, userPassword, checkPassword)) {
+        if (StringUtils.isAnyBlank(username, password, checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
         }
         if (username.length() < 4) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户账号过短");
         }
-        if (userPassword.length() < 8 || checkPassword.length() < 8) {
+        if (password.length() < 8 || checkPassword.length() < 8) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户密码过短");
         }
         // 密码和校验密码相同
-        if (!userPassword.equals(checkPassword)) {
+        if (!password.equals(checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "两次输入的密码不一致");
         }
         synchronized (username.intern()) {
@@ -46,7 +51,7 @@ public class UserServiceImpl implements UserService {
             if (ok != null) {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户名重复");
             }
-            String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+            String encryptPassword = DigestUtils.md5DigestAsHex((SALT + password).getBytes());
             // 3. 插入数据
             User user = new User();
             user.setUsername(username);
@@ -62,6 +67,23 @@ public class UserServiceImpl implements UserService {
             }
             return true;
         }
+    }
+
+    @Override
+    public UserVo login(String username, String userPassword, HttpServletRequest request) {
+        if (StringUtils.isAnyBlank(username, userPassword)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户名或密码为空");
+        }
+        String encryptPassword = DigestUtils.md5DigestAsHex((SALT + userPassword).getBytes());
+        User user = userMapper.queryUserPassword(username, encryptPassword);
+        if (user == null) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "用户名密码不匹配");
+        }
+        UserVo userVo = null;
+        userVo.setAuth(user.getAuth());
+        userVo.setUsername(user.getUsername());
+        request.getSession().setAttribute(USER_LOGIN_STATE, userVo);
+        return userVo;
     }
 
 

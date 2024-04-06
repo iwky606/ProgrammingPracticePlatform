@@ -10,4 +10,7 @@ public interface UserMapper {
     Integer queryUser(String username);
 
     int insertUser(User user);
+
+    @Select("SELECT * FROM users WHERE username=#{username} AND password=#{password}")
+    User queryUserPassword(String username, String password);
 }

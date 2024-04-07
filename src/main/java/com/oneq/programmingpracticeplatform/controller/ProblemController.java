@@ -3,9 +3,11 @@ package com.oneq.programmingpracticeplatform.controller;
 import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
+import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,10 +20,20 @@ public class ProblemController {
     @Resource
     ProblemService problemService;
 
-    @PostMapping
+    /*
+     * 返回problem_id
+     * */
+    @PostMapping("/create")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
     public BaseResponse<Long> createProblem(HttpServletRequest request) {
         long id = problemService.createProblem(request);
+        return ResultUtils.success(id);
+    }
+
+    @PostMapping("/edit")
+    @AuthCheck(mustRole = AuthEnum.TEACHER)
+    public BaseResponse<Long> editProblem(@RequestBody EditProblemRequest editProblemRequest) {
+        long id = problemService.updateProblem(editProblemRequest);
         return ResultUtils.success(id);
     }
 }

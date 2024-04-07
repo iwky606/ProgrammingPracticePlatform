@@ -4,6 +4,7 @@ import cn.hutool.core.lang.Snowflake;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.ProblemMapper;
+import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
@@ -33,4 +34,16 @@ public class ProblemServiceImpl implements ProblemService {
         }
         return id;
     }
+
+    @Override
+    public long updateProblem(EditProblemRequest editProblemRequest) {
+        long timestamp = System.currentTimeMillis();
+        int updateNums = problemMapper.updateProblem(editProblemRequest.getId(), timestamp, editProblemRequest.getDescription(), editProblemRequest.getTags(), editProblemRequest.getSolution(), editProblemRequest.getJudgeConfig(), editProblemRequest.getJudgeInputs(), editProblemRequest.getJudgeOutputs());
+        if (updateNums == 0) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "修改失败");
+        }
+        return editProblemRequest.getId();
+    }
+
+
 }

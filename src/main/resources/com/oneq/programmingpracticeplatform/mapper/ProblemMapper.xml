@@ -11,4 +11,29 @@
         INSERT INTO problem (id, creator, create_time, update_time)
         VALUES (#{id}, #{creator}, #{createTime}, #{updateTime});
     </insert>
+    <update id="updateProblem">
+        UPDATE problem
+        <set>
+            update_time=#{updateTime},
+            <if test="description != null and description != ''">
+                description = #{description},
+            </if>
+            <if test="tags != null and tags != ''">
+                tags = #{tags},
+            </if>
+            <if test="solution != null and solution != ''">
+                solution = #{solution},
+            </if>
+            <if test="judgeConfig != null and judgeConfig != ''">
+                judge_config = #{judgeConfig},
+            </if>
+            <if test="judgeInputs != null and judgeInputs != ''">
+                judge_inputs = #{judgeInputs},
+            </if>
+            <if test="judgeOutputs != null and judgeOutputs != ''">
+                judge_outputs = #{judgeOutputs},
+            </if>
+        </set>
+        WHERE id=#{id};
+    </update>
 </mapper>

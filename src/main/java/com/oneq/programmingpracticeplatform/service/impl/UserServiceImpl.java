@@ -87,8 +87,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserVo getLoginUser(HttpServletRequest request) {
-        UserVo userVo = (UserVo) request.getSession().getAttribute(USER_LOGIN_STATE);
-        return userVo;
+        return (UserVo) request.getSession().getAttribute(USER_LOGIN_STATE);
     }
 
     @Override

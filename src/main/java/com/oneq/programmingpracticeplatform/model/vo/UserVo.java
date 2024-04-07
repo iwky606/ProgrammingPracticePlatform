@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class UserVo {
+    private long id;
     private String username;
     private AuthEnum auth;
 }

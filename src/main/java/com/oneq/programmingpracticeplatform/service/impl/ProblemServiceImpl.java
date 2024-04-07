@@ -27,7 +27,7 @@ public class ProblemServiceImpl implements ProblemService {
         UserVo loginUser = userService.getLoginUser(request);
         long id = snowflake.nextId();
         long timestamp = System.currentTimeMillis();
-        int rowNums = problemMapper.createProblem(id, loginUser.getUsername(), timestamp, timestamp);
+        int rowNums = problemMapper.createProblem(id, loginUser.getId(), timestamp, timestamp);
         if (rowNums == 0) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "创建题目失败");
         }

@@ -79,6 +79,7 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "用户名密码不匹配");
         }
         UserVo userVo = new UserVo();
+        userVo.setId(user.getId());
         userVo.setAuth(user.getAuth());
         userVo.setUsername(user.getUsername());
         request.getSession().setAttribute(USER_LOGIN_STATE, userVo);

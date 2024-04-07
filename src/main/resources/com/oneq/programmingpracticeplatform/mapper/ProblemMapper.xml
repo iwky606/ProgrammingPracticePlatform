@@ -9,6 +9,6 @@
 
     <insert id="createProblem">
         INSERT INTO problem (id, creator, create_time, update_time)
-        VALUES (#{id}, #{creator}, #{creatTime}, #{updateTime});
+        VALUES (#{id}, #{creator}, #{createTime}, #{updateTime});
     </insert>
 </mapper>

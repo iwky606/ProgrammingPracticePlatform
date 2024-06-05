@@ -1,5 +1,6 @@
 package com.oneq.programmingpracticeplatform.config;
 
+import com.oneq.programmingpracticeplatform.model.entity.problem.ProblemDescription;
 import com.oneq.programmingpracticeplatform.typehandler.AuthTypeHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

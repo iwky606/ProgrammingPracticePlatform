@@ -6,10 +6,7 @@ import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -36,4 +33,7 @@ public class ProblemController {
         long id = problemService.updateProblem(editProblemRequest);
         return ResultUtils.success(id);
     }
+
+    // @GetMapping("/detail")
+    // public BaseResponse<Pro>
 }

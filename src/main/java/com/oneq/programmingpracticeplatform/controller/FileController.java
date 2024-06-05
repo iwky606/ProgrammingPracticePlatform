@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/file")
 public class FileController {
-    @PostMapping("/problem/test_file")
+    @PostMapping("/problem/judge_file")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
     public void uploadProblemTestFile() {
 

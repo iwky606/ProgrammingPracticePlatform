@@ -50,7 +50,7 @@
 
     <select id="getProblemDetail"
             resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
-        SELECT id, title, description, tags, solution, judgeConfig
+        SELECT id, title, description, tags, solution, judgeConfig, visible
         FROM problem
         WHERE id = #{id}
     </select>

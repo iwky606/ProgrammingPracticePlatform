@@ -1,7 +1,7 @@
 package com.oneq.programmingpracticeplatform.config;
 
-import com.oneq.programmingpracticeplatform.model.entity.problem.ProblemDescription;
-import com.oneq.programmingpracticeplatform.typehandler.AuthTypeHandler;
+import com.oneq.programmingpracticeplatform.typehandler.enumhandler.AuthTypeHandler;
+import com.oneq.programmingpracticeplatform.typehandler.enumhandler.ProblemVisibleHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -10,5 +10,10 @@ public class MybatisConfig {
     @Bean
     public AuthTypeHandler authTypeHandler() {
         return new AuthTypeHandler();
+    }
+
+    @Bean
+    public ProblemVisibleHandler problemVisibleHandler() {
+        return new ProblemVisibleHandler();
     }
 }

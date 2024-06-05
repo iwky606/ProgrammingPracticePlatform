@@ -1,5 +1,6 @@
 package com.oneq.programmingpracticeplatform.model.entity.problem;
 
+import com.oneq.programmingpracticeplatform.model.enums.ProblemVisibleEnum;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,5 +17,6 @@ public class Problem implements Serializable {
     private List<String> tags;
     private ProblemSolution solution;
     private JudgeConfig judgeConfig;
+    private ProblemVisibleEnum visible;
     private static final long serialVersionUID = 1L;
 }

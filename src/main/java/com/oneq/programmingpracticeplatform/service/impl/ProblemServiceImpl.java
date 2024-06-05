@@ -6,6 +6,7 @@ import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.ProblemMapper;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
+import com.oneq.programmingpracticeplatform.model.enums.ProblemVisibleEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
@@ -48,7 +49,15 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public Problem getProblemDetail(Long id) {
-        return problemMapper.getProblemDetail(id);
+        Problem problemDetail = problemMapper.getProblemDetail(id);
+        if (problemDetail == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目不存在");
+        }
+        if (problemDetail.getVisible().equals(ProblemVisibleEnum.PRIVATE)) {
+            throw new BusinessException(ErrorCode.FORBIDDEN_ERROR, "题目未公开");
+        }
+        // TODO: 题目处于竞赛中的情况
+        return problemDetail;
     }
 
 }

@@ -9,7 +9,7 @@
 
     <resultMap id="userResultMap" type="com.oneq.programmingpracticeplatform.model.entity.User">
         <result property="auth" column="auth" javaType="com.oneq.programmingpracticeplatform.model.enums.AuthEnum"
-                typeHandler="com.oneq.programmingpracticeplatform.typehandler.AuthTypeHandler"/>
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.enumhandler.AuthTypeHandler"/>
     </resultMap>
 
     <insert id="insertUser" parameterType="com.oneq.programmingpracticeplatform.model.entity.User">

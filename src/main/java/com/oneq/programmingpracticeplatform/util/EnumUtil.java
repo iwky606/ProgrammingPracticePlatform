@@ -9,11 +9,4 @@ public class EnumUtil {
             if (value == myEnum.getValue()) return myEnum;
         return null;
     }
-
-    public static <T extends BaseEnum> T getEnumByLable(Class<T> myclass, int value) {
-        for (T myEnum : myclass.getEnumConstants())
-            if (myEnum.getValue() == value) return myEnum;
-        return null;
-    }
-
 }

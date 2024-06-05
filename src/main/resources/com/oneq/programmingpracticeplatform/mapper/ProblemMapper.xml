@@ -6,7 +6,15 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.oneq.programmingpracticeplatform.mapper.ProblemMapper">
-
+    <resultMap id="ProblemMap" type="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
+        <result property="solution" column="solution"
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.ProblemSolutionTypeHandler"/>
+        <result property="description" column="description"
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.ProblemDescriptionTypeHandler"
+        />
+        <result property="tags" column="tags"
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.StringToJsonTypeHandler"/>
+    </resultMap>
     <insert id="createProblem">
         INSERT INTO problem (id, creator, create_time, update_time)
         VALUES (#{id}, #{creator}, #{createTime}, #{updateTime});
@@ -16,23 +24,26 @@
         <set>
             update_time=#{updateTime},
             <if test="description != null and description != ''">
-                description = #{description},
+                description =
+                #{description,typeHandler=com.oneq.programmingpracticeplatform.typehandler.ProblemDescriptionTypeHandler},
             </if>
             <if test="tags != null and tags != ''">
-                tags = #{tags},
+                tags = #{tags,typeHandler=com.oneq.programmingpracticeplatform.typehandler.StringToJsonTypeHandler},
             </if>
             <if test="solution != null and solution != ''">
-                solution = #{solution},
+                solution =
+                #{solution,typeHandler=com.oneq.programmingpracticeplatform.typehandler.ProblemSolutionTypeHandler},
             </if>
             <if test="judgeConfig != null and judgeConfig != ''">
-                judge_config = #{judgeConfig},
+                judge_config =
+                #{judgeConfig,typeHandler=com.oneq.programmingpracticeplatform.typehandler.JudgeConfigTypeHandler},
             </if>
-            <if test="judgeInputs != null and judgeInputs != ''">
-                judge_inputs = #{judgeInputs},
-            </if>
-            <if test="judgeOutputs != null and judgeOutputs != ''">
-                judge_outputs = #{judgeOutputs},
-            </if>
+            <!--            <if test="judgeInputs != null and judgeInputs != ''">-->
+            <!--                judge_inputs = #{judgeInputs},-->
+            <!--            </if>-->
+            <!--            <if test="judgeOutputs != null and judgeOutputs != ''">-->
+            <!--                judge_outputs = #{judgeOutputs},-->
+            <!--            </if>-->
         </set>
         WHERE id=#{id};
     </update>

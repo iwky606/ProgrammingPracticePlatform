@@ -1,9 +1,16 @@
 package com.oneq.programmingpracticeplatform.config;
 
+import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
+import com.oneq.programmingpracticeplatform.model.enums.ProblemVisibleEnum;
 import com.oneq.programmingpracticeplatform.typehandler.enumhandler.AuthTypeHandler;
 import com.oneq.programmingpracticeplatform.typehandler.enumhandler.ProblemVisibleHandler;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.TypeHandlerRegistry;
+import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class MybatisConfig {
@@ -15,5 +22,19 @@ public class MybatisConfig {
     @Bean
     public ProblemVisibleHandler problemVisibleHandler() {
         return new ProblemVisibleHandler();
+    }
+
+    @Bean
+    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
+        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
+        sqlSessionFactoryBean.setDataSource(dataSource);
+
+        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
+        TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+        typeHandlerRegistry.register(ProblemVisibleEnum.class, ProblemVisibleHandler.class);
+        typeHandlerRegistry.register(AuthEnum.class, AuthTypeHandler.class);
+
+        sqlSessionFactoryBean.setConfiguration(configuration);
+        return sqlSessionFactoryBean.getObject();
     }
 }

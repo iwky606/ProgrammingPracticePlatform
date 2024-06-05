@@ -40,7 +40,7 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public long updateProblem(EditProblemRequest editProblemRequest) {
         long timestamp = System.currentTimeMillis();
-        int updateNums = problemMapper.updateProblem(editProblemRequest.getId(), timestamp, editProblemRequest.getDescription(), editProblemRequest.getTags(), editProblemRequest.getSolution(), editProblemRequest.getJudgeConfig(), editProblemRequest.getJudgeInputs(), editProblemRequest.getJudgeOutputs());
+        int updateNums = problemMapper.updateProblem(editProblemRequest.getId(), timestamp, editProblemRequest.getDescription(), editProblemRequest.getTags(), editProblemRequest.getSolution(), editProblemRequest.getJudgeConfig(), editProblemRequest.getVisible(), editProblemRequest.getJudgeInputs(), editProblemRequest.getJudgeOutputs());
         if (updateNums == 0) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "修改失败");
         }
@@ -53,7 +53,7 @@ public class ProblemServiceImpl implements ProblemService {
         if (problemDetail == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目不存在");
         }
-        if (problemDetail.getVisible().equals(ProblemVisibleEnum.PRIVATE)) {
+        if (problemDetail.getVisible() == null || problemDetail.getVisible().equals(ProblemVisibleEnum.PRIVATE)) {
             throw new BusinessException(ErrorCode.FORBIDDEN_ERROR, "题目未公开");
         }
         // TODO: 题目处于竞赛中的情况

@@ -3,7 +3,7 @@ package com.oneq.programmingpracticeplatform.model.enums;
 import com.oneq.programmingpracticeplatform.model.enums.base.BaseEnum;
 
 public enum AuthEnum implements BaseEnum {
-    ADMIN(1), STUDENT(2), TEACHER(3);
+    ADMIN(0), STUDENT(1), TEACHER(2);
 
     private final int value;
 

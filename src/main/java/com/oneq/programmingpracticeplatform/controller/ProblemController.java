@@ -42,7 +42,6 @@ public class ProblemController {
     public BaseResponse<ProblemVo> getProblem(@RequestParam Long id) {
         log.info(String.valueOf(id));
         Problem problemDetail = problemService.getProblemDetail(id);
-
-        return ResultUtils.success(null);
+        return ResultUtils.success(ProblemVo.objToVo(problemDetail));
     }
 }

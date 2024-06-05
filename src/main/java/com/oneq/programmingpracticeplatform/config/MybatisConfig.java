@@ -24,17 +24,4 @@ public class MybatisConfig {
         return new ProblemVisibleHandler();
     }
 
-    @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dataSource);
-
-        org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
-        TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
-        typeHandlerRegistry.register(ProblemVisibleEnum.class, ProblemVisibleHandler.class);
-        typeHandlerRegistry.register(AuthEnum.class, AuthTypeHandler.class);
-
-        sqlSessionFactoryBean.setConfiguration(configuration);
-        return sqlSessionFactoryBean.getObject();
-    }
 }

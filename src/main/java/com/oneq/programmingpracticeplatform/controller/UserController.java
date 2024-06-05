@@ -11,6 +11,7 @@ import com.oneq.programmingpracticeplatform.model.dto.user.UserRegisterRequest;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.UserService;
+import com.oneq.programmingpracticeplatform.util.EnumUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +55,10 @@ public class UserController {
     @PostMapping("/grantAuth")
     @AuthCheck(mustRole = AuthEnum.ADMIN)
     public BaseResponse<String> grantAuth(String username, int auth) {
-        if (StringUtils.isAnyBlank(username) || AuthEnum.getEnumByValue(auth) == null) {
+        if (StringUtils.isAnyBlank(username) || EnumUtil.getEnumByValue(AuthEnum.class, auth) == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        userService.updateUserAuth(username, AuthEnum.getEnumByValue(auth));
+        userService.updateUserAuth(username, EnumUtil.getEnumByValue(AuthEnum.class, auth));
 
         return ResultUtils.success("修改成功");
     }

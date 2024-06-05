@@ -2,12 +2,12 @@ package com.oneq.programmingpracticeplatform.model.enums;
 
 import com.oneq.programmingpracticeplatform.model.enums.base.BaseEnum;
 
-public enum AuthEnum implements BaseEnum {
-    ADMIN(1), STUDENT(2), TEACHER(3);
+public enum ProblemVisiableEnum implements BaseEnum {
+    PRIVATE(1), PUBLIC(2), CONTEST(3);
 
     private final int value;
 
-    AuthEnum(int value) {
+    ProblemVisiableEnum(int value) {
         this.value = value;
     }
 

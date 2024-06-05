@@ -4,8 +4,11 @@ import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
+import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
+import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -13,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/problem")
+@Slf4j
 public class ProblemController {
     @Resource
     ProblemService problemService;
@@ -34,6 +38,11 @@ public class ProblemController {
         return ResultUtils.success(id);
     }
 
-    // @GetMapping("/detail")
-    // public BaseResponse<Pro>
+    @GetMapping("/detail")
+    public BaseResponse<ProblemVo> getProblem(@RequestParam Long id) {
+        log.info(String.valueOf(id));
+        Problem problemDetail = problemService.getProblemDetail(id);
+
+        return ResultUtils.success(null);
+    }
 }

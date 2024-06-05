@@ -5,6 +5,7 @@ import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.ProblemMapper;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
+import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
@@ -45,5 +46,9 @@ public class ProblemServiceImpl implements ProblemService {
         return editProblemRequest.getId();
     }
 
+    @Override
+    public Problem getProblemDetail(Long id) {
+        return problemMapper.getProblemDetail(id);
+    }
 
 }

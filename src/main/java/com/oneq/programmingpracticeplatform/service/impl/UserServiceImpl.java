@@ -8,6 +8,7 @@ import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.UserService;
+import com.oneq.programmingpracticeplatform.util.EnumUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -56,7 +57,7 @@ public class UserServiceImpl implements UserService {
             User user = new User();
             user.setUsername(username);
             user.setPassword(encryptPassword);
-            user.setAuth(AuthEnum.getEnumByValue(auth));
+            user.setAuth(EnumUtil.getEnumByValue(AuthEnum.class, auth));
             long timestamp = System.currentTimeMillis();
             user.setCreateTime(timestamp);
             user.setUpdateTime(timestamp);

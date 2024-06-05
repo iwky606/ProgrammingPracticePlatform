@@ -47,4 +47,11 @@
         </set>
         WHERE id=#{id};
     </update>
+
+    <select id="getProblemDetail"
+            resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
+        SELECT id, title, description, tags, solution, judgeConfig
+        FROM problem
+        WHERE id = #{id}
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.oneq.programmingpracticeplatform.typehandler;
 
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
+import com.oneq.programmingpracticeplatform.util.EnumUtil;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedTypes;
@@ -21,18 +22,18 @@ public class AuthTypeHandler extends BaseTypeHandler<AuthEnum> {
     @Override
     public AuthEnum getNullableResult(ResultSet rs, String columnName) throws SQLException {
         int code = rs.getInt(columnName);
-        return (code == 0 && rs.wasNull()) ? null : AuthEnum.getEnumByValue(code);
+        return (code == 0 && rs.wasNull()) ? null : EnumUtil.getEnumByValue(AuthEnum.class, code);
     }
 
     @Override
     public AuthEnum getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
         int code = rs.getInt(columnIndex);
-        return (code == 0 && rs.wasNull()) ? null : AuthEnum.getEnumByValue(code);
+        return (code == 0 && rs.wasNull()) ? null : EnumUtil.getEnumByValue(AuthEnum.class, code);
     }
 
     @Override
     public AuthEnum getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
         int code = cs.getInt(columnIndex);
-        return (code == 0 && cs.wasNull()) ? null : AuthEnum.getEnumByValue(code);
+        return (code == 0 && cs.wasNull()) ? null : EnumUtil.getEnumByValue(AuthEnum.class, code);
     }
 }

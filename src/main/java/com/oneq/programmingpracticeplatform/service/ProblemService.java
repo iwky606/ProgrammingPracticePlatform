@@ -16,4 +16,9 @@ public interface ProblemService {
     Problem getProblemDetail(Long id, User user);
 
     void submitCode(SubmissionReq submissionReq, User user);
+
+    String[] getProblemInputFiles(long problemId, boolean useCache);
+
+    String[] getProblemOutputFiles(long problemId, boolean useCache);
+
 }

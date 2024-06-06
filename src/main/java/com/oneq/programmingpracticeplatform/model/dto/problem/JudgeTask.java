@@ -5,12 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.amqp.core.Message;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class JudgeTask {
+public class JudgeTask{
     private Long judgeId;
     private String[] inputs;
     private String code;

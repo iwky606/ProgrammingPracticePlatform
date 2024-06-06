@@ -1,18 +1,21 @@
 package com.oneq.programmingpracticeplatform.controller;
 
-import com.oneq.programmingpracticeplatform.model.vo.UserVo;
-import org.springframework.stereotype.Controller;
+import com.oneq.programmingpracticeplatform.service.ProblemService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import static com.oneq.programmingpracticeplatform.constant.UserConstant.USER_LOGIN_STATE;
 
 @RestController
 public class TestController {
+
+    @Resource
+    private ProblemService problemService;
+
     @GetMapping("/test")
-    public UserVo Hello(HttpServletRequest request) {
-        return (UserVo) request.getSession().getAttribute(USER_LOGIN_STATE);
+    public void Hello(HttpServletRequest request) {
+        problemService.getProblemInputFiles(1798691417661509632L, false);
     }
 }

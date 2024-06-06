@@ -4,10 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Snowflake;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
+import com.oneq.programmingpracticeplatform.mapper.FileMapper;
 import com.oneq.programmingpracticeplatform.mapper.ProblemMapper;
 import com.oneq.programmingpracticeplatform.mapper.SubmissionMapper;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
+import com.oneq.programmingpracticeplatform.model.dto.problem.JudgeTask;
 import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
@@ -17,10 +19,13 @@ import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -35,6 +40,12 @@ public class ProblemServiceImpl implements ProblemService {
     RabbitTemplate rabbitTemplate;
     @Resource
     SubmissionMapper submissionMapper;
+
+    @Resource
+    FileMapper fileMapper;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public long createProblem(HttpServletRequest request) {
@@ -94,7 +105,41 @@ public class ProblemServiceImpl implements ProblemService {
         submission.setSubmissionTime(now);
         submissionMapper.createSubmission(submission);
 
+        JudgeTask judgeTask = new JudgeTask(
+                // submission.getId(),
+        );
+        rabbitTemplate.convertAndSend("judge.queue", judgeTask);
+
         log.info(submission.toString());
     }
+
+    @Override
+    public String[] getProblemInputFiles(long problemId, boolean useCache) {
+        Problem problemInputDetail = problemMapper.getProblemInputDetail(problemId);
+        long st = System.currentTimeMillis();
+        List<String> inputs = fileMapper.findInputs(problemInputDetail.getJudgeInputs());
+        long ed = System.currentTimeMillis();
+        log.info("query time:"+(ed-st));
+
+        // log.info(inputs.toString());
+        // log.info(problemInputDetail.getJudgeInputs().toString());
+        // redisTemplate.opsForValue().get()
+        return new String[0];
+    }
+
+    @Override
+    public String[] getProblemOutputFiles(long problemId, boolean useCache) {
+        return new String[0];
+    }
+
+
+    private String GetInputFilesCacheKey(long problemId) {
+        return "problem.in." + problemId;
+    }
+
+    private String GetOutputFilesCacheKey(long problemId) {
+        return "problem.out." + problemId;
+    }
+
 
 }

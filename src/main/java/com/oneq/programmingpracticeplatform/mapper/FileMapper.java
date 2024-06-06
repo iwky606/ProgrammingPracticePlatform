@@ -5,8 +5,13 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 
+import java.util.List;
+
 @Mapper
 public interface FileMapper {
     @Insert("INSERT INTO files (file_name, data,uploader,upload_time) VALUES (#{fileName}, #{data},#{uploader},#{time})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")    void insertFile(File file);
+
+    // 假设你需要根据一组ID来查询用户
+    List<String> findInputs(List<Integer> ids);
 }

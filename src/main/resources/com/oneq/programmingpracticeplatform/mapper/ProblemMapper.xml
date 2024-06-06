@@ -72,4 +72,19 @@
         FROM problem
         WHERE id = #{id}
     </select>
+
+    <select id="getProblemInputDetail"
+            resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem"
+            resultMap="ProblemMap">
+        SELECT judge_inputs
+        FROM problem
+        WHERE id = #{id}
+    </select>
+    <select id="getProblemOutputDetail"
+            resultMap="ProblemMap"
+            resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
+        SELECT judge_outputs
+        FROM problem
+        WHERE id = #{id}
+    </select>
 </mapper>

@@ -18,4 +18,8 @@ public interface ProblemMapper {
     int updateProblem(long id, long updateTime, ProblemDescription description, List<String> tags, ProblemSolution solution, JudgeConfig judgeConfig, ProblemVisibleEnum visible, List<Integer> judgeInputs, List<Integer> judgeOutputs);
 
     Problem getProblemDetail(long id);
+
+    Problem getProblemInputDetail(long id);
+
+    Problem getProblemOutputDetail(long id);
 }

@@ -7,9 +7,9 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
   datasource:
-    url: jdbc:mysql://59.110.155.175:3306/pppdb?serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/pppd?serverTimezone=UTC
     username: root
-    password: wky926996
+    password: 123456
   rabbitmq:
     host: 127.0.0.1
     port: 5672
@@ -19,6 +19,13 @@ spring:
     listener:
       simple:
         prefetch: 1
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
 mybatis:
   configuration:

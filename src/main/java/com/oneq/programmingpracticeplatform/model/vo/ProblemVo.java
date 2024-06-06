@@ -5,6 +5,7 @@ import com.oneq.programmingpracticeplatform.model.entity.problem.JudgeConfig;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.problem.ProblemDescription;
 import com.oneq.programmingpracticeplatform.model.entity.problem.ProblemSolution;
+import com.oneq.programmingpracticeplatform.model.enums.ProblemVisibleEnum;
 import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,6 +26,7 @@ public class ProblemVo implements Serializable {
     private JudgeConfig judgeConfig;
     private List<Integer> judgeInputs;
     private List<Integer> judgeOutputs;
+    private ProblemVisibleEnum visible;
 
     // 竞赛模式不展示
     private List<String> tags;

@@ -3,6 +3,7 @@ package com.oneq.programmingpracticeplatform.aop;
 import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
+import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.UserService;
@@ -35,7 +36,7 @@ public class AuthAspect {
         HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
 
         // 当前登录用户
-        UserVo loginUser = userService.getLoginUser(request);
+        User loginUser = userService.getLoginUser(request);
         if (loginUser == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }

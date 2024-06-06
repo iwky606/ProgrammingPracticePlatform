@@ -1,5 +1,6 @@
 package com.oneq.programmingpracticeplatform.service;
 
+import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 
@@ -10,7 +11,7 @@ public interface UserService {
 
     UserVo login(String username, String userPassword, HttpServletRequest request);
 
-    UserVo getLoginUser(HttpServletRequest request);
+    User getLoginUser(HttpServletRequest request);
 
     void updateUserAuth(String username, AuthEnum auth);
 }

@@ -83,13 +83,13 @@ public class UserServiceImpl implements UserService {
         userVo.setId(user.getId());
         userVo.setAuth(user.getAuth());
         userVo.setUsername(user.getUsername());
-        request.getSession().setAttribute(USER_LOGIN_STATE, userVo);
+        request.getSession().setAttribute(USER_LOGIN_STATE, user);
         return userVo;
     }
 
     @Override
-    public UserVo getLoginUser(HttpServletRequest request) {
-        return (UserVo) request.getSession().getAttribute(USER_LOGIN_STATE);
+    public User getLoginUser(HttpServletRequest request) {
+        return (User) request.getSession().getAttribute(USER_LOGIN_STATE);
     }
 
     @Override

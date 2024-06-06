@@ -4,10 +4,13 @@ import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
+import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
+import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
+import com.oneq.programmingpracticeplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 public class ProblemController {
     @Resource
     ProblemService problemService;
+
+    @Resource
+    UserService userService;
 
     /*
      * 返回problem_id
@@ -39,9 +45,11 @@ public class ProblemController {
     }
 
     @GetMapping("/detail")
-    public BaseResponse<ProblemVo> getProblem(@RequestParam Long id) {
+    public BaseResponse<ProblemVo> getProblem(@RequestParam Long id, HttpServletRequest req) {
         log.info(String.valueOf(id));
-        Problem problemDetail = problemService.getProblemDetail(id);
+        User loginUser = userService.getLoginUser(req);
+
+        Problem problemDetail = problemService.getProblemDetail(id, loginUser);
         return ResultUtils.success(ProblemVo.objToVo(problemDetail));
     }
 }

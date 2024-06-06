@@ -5,6 +5,7 @@ import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.ProblemMapper;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
+import com.oneq.programmingpracticeplatform.model.dto.problem.Submission;
 import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
@@ -13,6 +14,8 @@ import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,11 +26,12 @@ import javax.servlet.http.HttpServletRequest;
 public class ProblemServiceImpl implements ProblemService {
     @Resource
     ProblemMapper problemMapper;
-
     @Resource
     UserService userService;
     @Resource
     Snowflake snowflake;
+    @Resource
+    RabbitTemplate rabbitTemplate;
 
     @Override
     public long createProblem(HttpServletRequest request) {
@@ -70,6 +74,11 @@ public class ProblemServiceImpl implements ProblemService {
 
         // TODO: 题目处于竞赛中的情况
         return problemDetail;
+    }
+
+    @Override
+    public void submitCode(Submission submission) {
+
     }
 
 }

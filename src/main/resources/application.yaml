@@ -10,6 +10,15 @@ spring:
     url: jdbc:mysql://59.110.155.175:3306/pppdb?serverTimezone=UTC
     username: root
     password: wky926996
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    virtual-host: /SandboxService
+    username: SandboxService
+    password: 123456
+    listener:
+      simple:
+        prefetch: 1
 
 mybatis:
   configuration:

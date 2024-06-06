@@ -4,6 +4,7 @@ import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
+import com.oneq.programmingpracticeplatform.model.dto.problem.Submission;
 import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
@@ -50,5 +51,11 @@ public class ProblemController {
 
         Problem problemDetail = problemService.getProblemDetail(id, loginUser);
         return ResultUtils.success(ProblemVo.objToVo(problemDetail));
+    }
+
+    @PostMapping("/submit")
+    public BaseResponse submitSolution(@RequestBody Submission submission) {
+
+        return ResultUtils.success(null);
     }
 }

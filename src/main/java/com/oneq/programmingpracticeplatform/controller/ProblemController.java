@@ -8,7 +8,6 @@ import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
-import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;

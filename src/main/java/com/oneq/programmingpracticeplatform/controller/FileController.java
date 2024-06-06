@@ -10,9 +10,6 @@ import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.FileService;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 
 @RestController
 @Slf4j
@@ -40,9 +36,7 @@ public class FileController {
         if (file.isEmpty()) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件为空");
         }
-
         UserVo loginUser = userService.getLoginUser(req);
-        log.info(String.valueOf(loginUser.getId()));
         int id = fileService.storeFile(file, loginUser.getId());
         return ResultUtils.success(id);
     }

@@ -1,11 +1,10 @@
 package com.oneq.programmingpracticeplatform.service;
 
+import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
-import com.oneq.programmingpracticeplatform.model.dto.problem.Submission;
 import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
-import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
-import com.oneq.programmingpracticeplatform.model.vo.UserVo;
+import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,5 +15,5 @@ public interface ProblemService {
 
     Problem getProblemDetail(Long id, User user);
 
-    void submitCode(Submission submission);
+    void submitCode(SubmissionReq submissionReq, User user);
 }

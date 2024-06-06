@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oneq.programmingpracticeplatform.mapper.SubmissionMapper">
+
+    <insert id="createSubmission" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO submission (id, user_id, problem_id, submission_time, problem_sets_id, code, lang)
+        VALUES (#{id}, #{userId}, #{problemId}, #{submissionTime}, #{problemSetsId}, #{code},
+                #{lang,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.LangTypeHandler})
+    </insert>
+</mapper>

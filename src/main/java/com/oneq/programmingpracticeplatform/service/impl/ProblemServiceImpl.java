@@ -1,21 +1,22 @@
 package com.oneq.programmingpracticeplatform.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Snowflake;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.ProblemMapper;
+import com.oneq.programmingpracticeplatform.mapper.SubmissionMapper;
+import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
-import com.oneq.programmingpracticeplatform.model.dto.problem.Submission;
 import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
+import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.enums.ProblemVisibleEnum;
-import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,6 +33,8 @@ public class ProblemServiceImpl implements ProblemService {
     Snowflake snowflake;
     @Resource
     RabbitTemplate rabbitTemplate;
+    @Resource
+    SubmissionMapper submissionMapper;
 
     @Override
     public long createProblem(HttpServletRequest request) {
@@ -77,8 +80,21 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public void submitCode(Submission submission) {
+    public void submitCode(SubmissionReq submissionReq, User user) {
+        long now = System.currentTimeMillis();
 
+        if (user == null) {
+            throw new BusinessException(ErrorCode.FORBIDDEN_ERROR, "请登录");
+        }
+        Submission submission = new Submission();
+        BeanUtil.copyProperties(submissionReq, submission);
+        long id = snowflake.nextId();
+        submission.setId(id);
+        submission.setUserId(user.getId());
+        submission.setSubmissionTime(now);
+        submissionMapper.createSubmission(submission);
+
+        log.info(submission.toString());
     }
 
 }

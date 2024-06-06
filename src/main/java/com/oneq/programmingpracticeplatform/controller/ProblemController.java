@@ -3,10 +3,11 @@ package com.oneq.programmingpracticeplatform.controller;
 import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
+import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
-import com.oneq.programmingpracticeplatform.model.dto.problem.Submission;
 import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
+import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
@@ -54,8 +55,9 @@ public class ProblemController {
     }
 
     @PostMapping("/submit")
-    public BaseResponse submitSolution(@RequestBody Submission submission) {
-
+    public BaseResponse submitSolution(@RequestBody SubmissionReq submission, HttpServletRequest req) {
+        User loginUser = userService.getLoginUser(req);
+        problemService.submitCode(submission, loginUser);
         return ResultUtils.success(null);
     }
 }

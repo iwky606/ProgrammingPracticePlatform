@@ -1,6 +1,10 @@
 package com.oneq.programmingpracticeplatform.controller;
 
 import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
+import com.oneq.programmingpracticeplatform.common.BaseResponse;
+import com.oneq.programmingpracticeplatform.common.ErrorCode;
+import com.oneq.programmingpracticeplatform.common.ResultUtils;
+import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.FileService;
@@ -32,21 +36,14 @@ public class FileController {
 
     @PostMapping("/problem/judge_file")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
-    public ResponseEntity<String> handleFileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest req) {
+    public BaseResponse<Integer> handleFileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest req) {
         if (file.isEmpty()) {
-            return new ResponseEntity<>("Please select a file to upload", HttpStatus.BAD_REQUEST);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件为空");
         }
 
-        try {
-            // TODO:
-            UserVo loginUser = userService.getLoginUser(req);
-            log.info(String.valueOf(loginUser.getId()));
-            fileService.storeFile(file, loginUser.getId());
-            return new ResponseEntity<>("You successfully uploaded " + file.getOriginalFilename(), HttpStatus.OK);
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        } catch (IOException e) {
-            return new ResponseEntity<>("Failed to upload the file", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        UserVo loginUser = userService.getLoginUser(req);
+        log.info(String.valueOf(loginUser.getId()));
+        int id = fileService.storeFile(file, loginUser.getId());
+        return ResultUtils.success(id);
     }
 }

@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class File {
-    private Long id;
+    private int id;
     private String fileName;
     private byte[] data;
+    private long uploader;
+    private long time;
 }

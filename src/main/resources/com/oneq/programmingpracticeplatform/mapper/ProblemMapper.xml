@@ -5,14 +5,14 @@
 <mapper namespace="com.oneq.programmingpracticeplatform.mapper.ProblemMapper">
     <resultMap id="ProblemMap" type="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
         <result property="solution" column="solution"
-                typeHandler="com.oneq.programmingpracticeplatform.typehandler.ProblemSolutionTypeHandler"/>
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.problemhandler.ProblemSolutionTypeHandler"/>
         <result property="description" column="description"
-                typeHandler="com.oneq.programmingpracticeplatform.typehandler.ProblemDescriptionTypeHandler"
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.problemhandler.ProblemDescriptionTypeHandler"
         />
         <result property="tags" column="tags"
                 typeHandler="com.oneq.programmingpracticeplatform.typehandler.StringToJsonTypeHandler"/>
         <result property="judgeConfig" column="judge_config"
-                typeHandler="com.oneq.programmingpracticeplatform.typehandler.JudgeConfigTypeHandler"/>
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.problemhandler.JudgeConfigTypeHandler"/>
     </resultMap>
 
     <insert id="createProblem">

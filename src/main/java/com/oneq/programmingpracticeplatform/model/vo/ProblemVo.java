@@ -5,6 +5,7 @@ import com.oneq.programmingpracticeplatform.model.entity.problem.JudgeConfig;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.problem.ProblemDescription;
 import com.oneq.programmingpracticeplatform.model.entity.problem.ProblemSolution;
+import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,8 @@ public class ProblemVo implements Serializable {
     private String title;
     private ProblemDescription description;
     private JudgeConfig judgeConfig;
+    private List<Integer> judgeInputs;
+    private List<Integer> judgeOutputs;
 
     // 竞赛模式不展示
     private List<String> tags;
@@ -32,7 +35,7 @@ public class ProblemVo implements Serializable {
             return null;
         }
         ProblemVo problemVo = new ProblemVo();
-        BeanUtils.copyProperties(problemVo, problem);
+        BeanUtils.copyProperties(problem, problemVo);
         return problemVo;
     }
 

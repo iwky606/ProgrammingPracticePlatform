@@ -10,12 +10,14 @@ import com.oneq.programmingpracticeplatform.model.enums.ProblemVisibleEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @Service
+@Slf4j
 public class ProblemServiceImpl implements ProblemService {
     @Resource
     ProblemMapper problemMapper;
@@ -50,10 +52,12 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public Problem getProblemDetail(Long id) {
         Problem problemDetail = problemMapper.getProblemDetail(id);
+        log.info(problemDetail.toString());
         if (problemDetail == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目不存在");
         }
         if (problemDetail.getVisible() == null || problemDetail.getVisible().equals(ProblemVisibleEnum.PRIVATE)) {
+
             throw new BusinessException(ErrorCode.FORBIDDEN_ERROR, "题目未公开");
         }
         // TODO: 题目处于竞赛中的情况

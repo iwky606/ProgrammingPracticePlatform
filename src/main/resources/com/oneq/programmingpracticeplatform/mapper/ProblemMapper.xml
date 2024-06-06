@@ -13,6 +13,10 @@
                 typeHandler="com.oneq.programmingpracticeplatform.typehandler.StringToJsonTypeHandler"/>
         <result property="judgeConfig" column="judge_config"
                 typeHandler="com.oneq.programmingpracticeplatform.typehandler.problemhandler.JudgeConfigTypeHandler"/>
+        <result property="judgeInputs" column="judge_inputs"
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.IntegerToJsonTypeHandler"/>
+        <result property="judgeOutputs" column="judge_outputs"
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.IntegerToJsonTypeHandler"/>
     </resultMap>
 
     <insert id="createProblem">
@@ -25,35 +29,46 @@
             update_time=#{updateTime},
             <if test="description != null and description != ''">
                 description =
-                #{description,typeHandler=com.oneq.programmingpracticeplatform.typehandler.ProblemDescriptionTypeHandler},
+                #{description,typeHandler=com.oneq.programmingpracticeplatform.typehandler.problemhandler.ProblemDescriptionTypeHandler},
             </if>
             <if test="tags != null and tags != ''">
                 tags = #{tags,typeHandler=com.oneq.programmingpracticeplatform.typehandler.StringToJsonTypeHandler},
             </if>
             <if test="solution != null and solution != ''">
                 solution =
-                #{solution,typeHandler=com.oneq.programmingpracticeplatform.typehandler.ProblemSolutionTypeHandler},
+                #{solution,typeHandler=com.oneq.programmingpracticeplatform.typehandler.problemhandler.ProblemSolutionTypeHandler},
             </if>
             <if test="judgeConfig != null and judgeConfig != ''">
                 judge_config =
-                #{judgeConfig,typeHandler=com.oneq.programmingpracticeplatform.typehandler.JudgeConfigTypeHandler},
+                #{judgeConfig,typeHandler=com.oneq.programmingpracticeplatform.typehandler.problemhandler.JudgeConfigTypeHandler},
             </if>
             <if test="visible!=null">
-                visible=#{visible,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.ProblemVisibleHandler}
+                visible=#{visible,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.ProblemVisibleHandler},
             </if>
-            <!--            <if test="judgeInputs != null and judgeInputs != ''">-->
-            <!--                judge_inputs = #{judgeInputs},-->
-            <!--            </if>-->
-            <!--            <if test="judgeOutputs != null and judgeOutputs != ''">-->
-            <!--                judge_outputs = #{judgeOutputs},-->
-            <!--            </if>-->
+            <if test="judgeInputs != null">
+                judge_inputs =
+                #{judgeInputs,typeHandler=com.oneq.programmingpracticeplatform.typehandler.IntegerToJsonTypeHandler},
+            </if>
+            <if test="judgeOutputs != null">
+                judge_outputs =
+                #{judgeOutputs,typeHandler=com.oneq.programmingpracticeplatform.typehandler.IntegerToJsonTypeHandler},
+            </if>
         </set>
         WHERE id=#{id};
     </update>
 
     <select id="getProblemDetail"
-            resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
-        SELECT id, title, description, tags, solution, judge_config, visible
+            resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem"
+            resultMap="com.oneq.programmingpracticeplatform.mapper.ProblemMapper.ProblemMap">
+        SELECT id,
+               title,
+               description,
+               tags,
+               solution,
+               judge_config,
+               visible,
+               judge_inputs,
+               judge_outputs
         FROM problem
         WHERE id = #{id}
     </select>

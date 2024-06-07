@@ -9,4 +9,13 @@
         VALUES (#{id}, #{userId}, #{problemId}, #{submissionTime}, #{problemSetsId}, #{code},
                 #{lang,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.LangTypeHandler})
     </insert>
+    <update id="updateSubmission">
+        UPDATE submission
+        SET status=#{status,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.JudgeStatusTypeHandler},
+            exec_time=#{execTime},
+            exec_memory=#{execMemory}
+        WHERE id = #{id}
+    </update>
+
+
 </mapper>

@@ -2,6 +2,7 @@ package com.oneq.programmingpracticeplatform.service;
 
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
+import com.oneq.programmingpracticeplatform.model.dto.problem.JudgeResult;
 import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
@@ -17,4 +18,5 @@ public interface ProblemService {
 
     void submitCode(SubmissionReq submissionReq, User user);
 
+    void JudgeSubmitResult(JudgeResult judgeResult);
 }

@@ -5,7 +5,6 @@ import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.problem.ProblemDescription;
 import com.oneq.programmingpracticeplatform.model.entity.problem.ProblemSolution;
 import com.oneq.programmingpracticeplatform.model.enums.ProblemVisibleEnum;
-import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -21,5 +20,5 @@ public interface ProblemMapper {
 
     Problem getProblemInputDetail(long id);
 
-    Problem getProblemOutputDetail(long id);
+    Problem getProblemJudgeInfo(long submissionId);
 }

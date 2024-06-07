@@ -80,11 +80,12 @@
         FROM problem
         WHERE id = #{id}
     </select>
-    <select id="getProblemOutputDetail"
+    <select id="getProblemJudgeInfo"
             resultMap="ProblemMap"
             resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
-        SELECT judge_outputs
-        FROM problem
-        WHERE id = #{id}
+        SELECT judge_outputs,judge_config
+        FROM problem as p,submission as s
+        WHERE s.id = #{id} and p.id=s.problem_id
     </select>
+
 </mapper>

@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface SubmissionMapper {
     void createSubmission(Submission submission);
+
+    void updateSubmission(Submission submission);
 }

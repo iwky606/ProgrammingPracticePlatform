@@ -4,17 +4,16 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Snowflake;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
-import com.oneq.programmingpracticeplatform.mapper.FileMapper;
 import com.oneq.programmingpracticeplatform.mapper.ProblemMapper;
 import com.oneq.programmingpracticeplatform.mapper.SubmissionMapper;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
-import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
-import com.oneq.programmingpracticeplatform.model.dto.problem.JudgeTask;
-import com.oneq.programmingpracticeplatform.model.dto.problem.ResourceLimit;
+import com.oneq.programmingpracticeplatform.model.dto.problem.*;
 import com.oneq.programmingpracticeplatform.model.entity.User;
+import com.oneq.programmingpracticeplatform.model.entity.problem.JudgeConfig;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
+import com.oneq.programmingpracticeplatform.model.enums.JudgeStatus;
 import com.oneq.programmingpracticeplatform.model.enums.ProblemVisibleEnum;
 import com.oneq.programmingpracticeplatform.service.FileService;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
@@ -145,7 +144,50 @@ public class ProblemServiceImpl implements ProblemService {
         BeanUtil.copyProperties(problemDetail.getJudgeConfig(), resourceLimit);
         JudgeTask judgeTask = new JudgeTask(submission.getId(), filesByIds, submission.getCode(), submission.getLang(), resourceLimit, null);
         rabbitTemplate.convertAndSend("judge.queue", judgeTask);
-
     }
+
+    @Override
+    public void JudgeSubmitResult(JudgeResult judgeResult) {
+        Problem problemDetail = problemMapper.getProblemJudgeInfo(judgeResult.getJudgeId());
+        List<String> outputs = fileService.getFilesByIds(problemDetail.getJudgeOutputs(), 3 * 60);
+
+        Submission submission = new Submission();
+        submission.setId(judgeResult.getJudgeId());
+        submission.setStatus(JudgeStatus.ACCEPT);
+        if (!judgeResult.getJudgeStatus().equals(JudgeStatus.NORMAL)) {
+            // 说明程序未完全执行
+            submission.setStatus(judgeResult.getJudgeStatus());
+        } else if (outputs.size() != judgeResult.getOutputs().length) {
+            // 题目设置有误, input和output不匹配
+            submission.setStatus(JudgeStatus.WRONG_ANSWER);
+        } else {
+            JudgeConfig judgeConfig = problemDetail.getJudgeConfig();
+            for (int i = 0; i < outputs.size(); i++) {
+                JudgeOutputs output = judgeResult.getOutputs()[i];
+                submission.setExecTime((int) output.getExecTime());
+                submission.setExecMemory(output.getExecMemory());
+                if (!outputs.get(i).trim().equals(output.getOutput().trim())) {
+                    submission.setStatus(JudgeStatus.WRONG_ANSWER);
+                    break;
+                }
+                if (judgeConfig.getTimeLimit() < output.getExecTime()) {
+                    submission.setStatus(JudgeStatus.TIME_LIMIT_EXCEED);
+                    break;
+                }
+                if (judgeConfig.getMemoryLimit() < output.getExecMemory()) {
+                    submission.setStatus(JudgeStatus.MEMORY_LIMIT_EXCEED);
+                    break;
+                }
+            }
+        }
+
+        updateSubmission(submission);
+    }
+
+
+    public void updateSubmission(Submission submission) {
+        submissionMapper.updateSubmission(submission);
+    }
+
 
 }

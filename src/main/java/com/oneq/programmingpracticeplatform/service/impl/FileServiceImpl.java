@@ -5,16 +5,25 @@ import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.FileMapper;
 import com.oneq.programmingpracticeplatform.model.entity.File;
 import com.oneq.programmingpracticeplatform.service.FileService;
+import io.swagger.models.auth.In;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.xml.datatype.Duration;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class FileServiceImpl implements FileService {
     @Resource
     private FileMapper fileMapper;
+
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
 
     public int storeFile(MultipartFile file, long uploader) {
         String fileName = file.getOriginalFilename();
@@ -34,5 +43,27 @@ public class FileServiceImpl implements FileService {
         File fileEntity = new File(0, fileName, data, uploader, now);
         fileMapper.insertFile(fileEntity);
         return fileEntity.getId();
+    }
+
+    /*
+    * cacheTime单位为秒
+    * */
+    @Override
+    public List<String> getFilesByIds(List<Integer> ids, long cacheTime) {
+        if (cacheTime > 0) {
+            Object res = redisTemplate.opsForValue().get(getCacheKey(ids));
+            if (res != null) {
+                return (List<String>) res;
+            }
+        }
+        List<String> files = fileMapper.findFiles(ids);
+        if (cacheTime > 0 && files != null && !files.isEmpty()) {
+            redisTemplate.opsForValue().set(getCacheKey(ids), files, cacheTime, TimeUnit.SECONDS);
+        }
+        return files;
+    }
+
+    public String getCacheKey(List<Integer> ids) {
+        return "file.cache." + ids.toString();
     }
 }

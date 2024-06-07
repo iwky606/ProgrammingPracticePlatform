@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Data
 public class JudgeConfig implements Serializable {
-    private Long timeLimit;
-    private Long memoryLimit;
+    private long timeLimit;// 毫秒
+    private int memoryLimit;// kb
     private static final long serialVersionUID = 1L;
 }

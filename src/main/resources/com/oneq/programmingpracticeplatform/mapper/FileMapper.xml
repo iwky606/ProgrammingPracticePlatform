@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oneq.programmingpracticeplatform.mapper.FileMapper">
-    <select id="findInputs" resultType="java.lang.String">
+    <select id="findFiles" resultType="java.lang.String">
         SELECT data
         FROM files
         WHERE id IN

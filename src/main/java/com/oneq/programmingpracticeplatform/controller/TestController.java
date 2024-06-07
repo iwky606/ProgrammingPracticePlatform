@@ -16,6 +16,5 @@ public class TestController {
 
     @GetMapping("/test")
     public void Hello(HttpServletRequest request) {
-        problemService.getProblemInputFiles(1798691417661509632L, false);
     }
 }

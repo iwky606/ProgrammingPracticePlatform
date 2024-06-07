@@ -68,6 +68,8 @@ public class ProblemServiceImpl implements ProblemService {
         if (updateNums == 0) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "修改失败");
         }
+
+        redisTemplate.expire(problemCacheKey(editProblemRequest.getId()), 0, TimeUnit.SECONDS);
         return editProblemRequest.getId();
     }
 

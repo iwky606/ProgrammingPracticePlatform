@@ -55,7 +55,7 @@ public class ProblemController {
     }
 
     @PostMapping("/submit")
-    public BaseResponse submitSolution(@RequestBody SubmissionReq submission, HttpServletRequest req) {
+    public BaseResponse submitCode(@RequestBody SubmissionReq submission, HttpServletRequest req) {
 
         User loginUser = userService.getLoginUser(req);
         problemService.submitCode(submission, loginUser);

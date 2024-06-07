@@ -69,6 +69,7 @@ public class ProblemServiceImpl implements ProblemService {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "修改失败");
         }
 
+        // 修改题目信息，就将题目缓存设置为过期
         redisTemplate.expire(problemCacheKey(editProblemRequest.getId()), 0, TimeUnit.SECONDS);
         return editProblemRequest.getId();
     }

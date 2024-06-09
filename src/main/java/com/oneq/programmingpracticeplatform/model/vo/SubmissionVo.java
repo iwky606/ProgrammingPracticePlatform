@@ -1,17 +1,11 @@
-package com.oneq.programmingpracticeplatform.model.entity.submission;
+package com.oneq.programmingpracticeplatform.model.vo;
 
 import com.oneq.programmingpracticeplatform.model.enums.JudgeStatus;
 import com.oneq.programmingpracticeplatform.model.enums.Language;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@ToString
-public class Submission {
+public class SubmissionVo {
     private long id;
     private long problemId;
     private long userId;
@@ -24,4 +18,3 @@ public class Submission {
     private int execMemory;
     private long ProblemSetsId;
 }
-

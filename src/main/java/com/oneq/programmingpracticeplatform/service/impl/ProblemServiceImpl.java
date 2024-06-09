@@ -14,6 +14,7 @@ import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.enums.JudgeStatus;
+import com.oneq.programmingpracticeplatform.model.enums.Language;
 import com.oneq.programmingpracticeplatform.model.enums.ProblemVisibleEnum;
 import com.oneq.programmingpracticeplatform.service.FileService;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
@@ -37,7 +38,6 @@ public class ProblemServiceImpl implements ProblemService {
     UserService userService;
     @Resource
     FileService fileService;
-
     @Resource
     Snowflake snowflake;
     @Resource
@@ -154,6 +154,8 @@ public class ProblemServiceImpl implements ProblemService {
         Submission submission = new Submission();
         submission.setId(judgeResult.getJudgeId());
         submission.setStatus(JudgeStatus.ACCEPT);
+        submission.setExecTime(0);
+        submission.setExecMemory(0);
         if (!judgeResult.getJudgeStatus().equals(JudgeStatus.NORMAL)) {
             // 说明程序未完全执行
             submission.setStatus(judgeResult.getJudgeStatus());
@@ -161,19 +163,29 @@ public class ProblemServiceImpl implements ProblemService {
             // 题目设置有误, input和output不匹配
             submission.setStatus(JudgeStatus.WRONG_ANSWER);
         } else {
+            // 答案比较，以及运行时间判断
             JudgeConfig judgeConfig = problemDetail.getJudgeConfig();
             for (int i = 0; i < outputs.size(); i++) {
                 JudgeOutputs output = judgeResult.getOutputs()[i];
-                submission.setExecTime((int) output.getExecTime());
-                submission.setExecMemory(output.getExecMemory());
+
+                // 取最大值保存
+                long time = Math.max(output.getExecTime(), submission.getExecTime());
+                submission.setExecTime((int) time);
+
+                long memory = Math.max(output.getExecMemory(), submission.getExecMemory());
+                submission.setExecMemory((int) memory);
+
+                // 比较答案
                 if (!outputs.get(i).trim().equals(output.getOutput().trim())) {
                     submission.setStatus(JudgeStatus.WRONG_ANSWER);
                     break;
                 }
+                // 判断时间是否超限
                 if (judgeConfig.getTimeLimit() < output.getExecTime()) {
                     submission.setStatus(JudgeStatus.TIME_LIMIT_EXCEED);
                     break;
                 }
+                // 判断内存超限
                 if (judgeConfig.getMemoryLimit() < output.getExecMemory()) {
                     submission.setStatus(JudgeStatus.MEMORY_LIMIT_EXCEED);
                     break;
@@ -184,6 +196,11 @@ public class ProblemServiceImpl implements ProblemService {
         updateSubmission(submission);
     }
 
+    @Override
+    public List<Submission> SubmissionList(Long problemId, Long problemSetId, Long userId, JudgeStatus status, Language lang) {
+        List<Submission> submission = submissionMapper.getSubmissions(problemId, problemSetId, userId, status, lang);
+        return submission;
+    }
 
     public void updateSubmission(Submission submission) {
         submissionMapper.updateSubmission(submission);

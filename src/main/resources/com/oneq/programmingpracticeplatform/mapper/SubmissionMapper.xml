@@ -3,7 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oneq.programmingpracticeplatform.mapper.SubmissionMapper">
-
+    <resultMap id="SubmissionMap" type="com.oneq.programmingpracticeplatform.model.entity.submission.Submission">
+        <result property="status" column="status"
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.enumhandler.JudgeStatusTypeHandler"/>
+        <result property="lang" column="lang"
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.enumhandler.LangTypeHandler"/>
+    </resultMap>
     <insert id="createSubmission" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO submission (id, user_id, problem_id, submission_time, problem_sets_id, code, lang)
         VALUES (#{id}, #{userId}, #{problemId}, #{submissionTime}, #{problemSetsId}, #{code},
@@ -16,6 +21,32 @@
             exec_memory=#{execMemory}
         WHERE id = #{id}
     </update>
-
+    <select id="getSubmissions"
+            resultType="com.oneq.programmingpracticeplatform.model.entity.submission.Submission"
+            resultMap="SubmissionMap"
+    >
+        SELECT s.id,problem_id,user_id,username,lang,submission_time,status,exec_time,exec_memory
+        FROM submission as s,users as u
+        <where>
+            s.user_id=u.id
+            <if test="problemId != null and problemId > 0">
+                AND problem_id=#{problemId}
+            </if>
+            <if test="userId !=null and userId > 0">
+                AND u.id=#{userId}
+            </if>
+            <if test="problemSetsId !=null and problemSetsId > 0">
+                AND problem_sets_id=#{problemSetsId}
+            </if>
+            <if test="status!=null">
+                AND
+                status=#{status,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.JudgeStatusTypeHandler}
+            </if>
+            <if test="lang!=null">
+                AND
+                lang=#{lang,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.LangTypeHandler}
+            </if>
+        </where>
+    </select>
 
 </mapper>

@@ -1,5 +1,7 @@
 package com.oneq.programmingpracticeplatform.controller;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
@@ -9,14 +11,21 @@ import com.oneq.programmingpracticeplatform.model.entity.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
+import com.oneq.programmingpracticeplatform.model.enums.JudgeStatus;
+import com.oneq.programmingpracticeplatform.model.enums.Language;
 import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
+import com.oneq.programmingpracticeplatform.model.vo.SubmissionVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/problem")
@@ -46,8 +55,7 @@ public class ProblemController {
     }
 
     @GetMapping("/detail")
-    public BaseResponse<ProblemVo> getProblem(@RequestParam Long id, HttpServletRequest req) {
-        log.info(String.valueOf(id));
+    public BaseResponse<ProblemVo> getProblem(@RequestParam long id, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
 
         Problem problemDetail = problemService.getProblemDetail(id, loginUser);
@@ -56,9 +64,26 @@ public class ProblemController {
 
     @PostMapping("/submit")
     public BaseResponse submitCode(@RequestBody SubmissionReq submission, HttpServletRequest req) {
-
         User loginUser = userService.getLoginUser(req);
         problemService.submitCode(submission, loginUser);
         return ResultUtils.success(null);
+    }
+
+    @GetMapping("/submissions")
+    public BaseResponse<List<SubmissionVo>> getSubmissionList(
+            @RequestParam(value = "problemId", required = false) Long problemId,
+            @RequestParam(value = "problemSetId", required = false) Long problemSetId,
+            @RequestParam(value = "userId", required = false) Long userId,
+            @RequestParam(value = "status", required = false) JudgeStatus status,
+            @RequestParam(value = "lang", required = false) Language lang) {
+        List<Submission> submissions = problemService.SubmissionList(problemId, problemSetId, userId, status, lang);
+        List<SubmissionVo> submissionVos = BeanUtil.copyToList(submissions, SubmissionVo.class);
+
+        return ResultUtils.success(submissionVos);
+    }
+
+    @GetMapping("/submission/detail")
+    public BaseResponse<SubmissionVo> getSubmissionDetail(@RequestParam long id) {
+        return null;
     }
 }

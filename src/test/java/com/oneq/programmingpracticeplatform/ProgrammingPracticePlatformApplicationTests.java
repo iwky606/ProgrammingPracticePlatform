@@ -27,7 +27,7 @@ class ProgrammingPracticePlatformApplicationTests {
         redisTemplate.opsForValue().set("hello", null);
         Object o = redisTemplate.opsForValue().get("hello");
         // if(o==null){
-            System.out.println(o==null);
+        System.out.println(o == null);
         // }
     }
 

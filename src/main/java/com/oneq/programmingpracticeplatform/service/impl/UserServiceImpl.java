@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Snowflake;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.UserMapper;
-import com.oneq.programmingpracticeplatform.model.entity.User;
+import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.UserService;

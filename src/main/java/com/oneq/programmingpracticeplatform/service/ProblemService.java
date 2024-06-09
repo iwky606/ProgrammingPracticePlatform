@@ -3,7 +3,8 @@ package com.oneq.programmingpracticeplatform.service;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
 import com.oneq.programmingpracticeplatform.model.dto.problem.JudgeResult;
-import com.oneq.programmingpracticeplatform.model.entity.User;
+import com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets;
+import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.JudgeStatus;
@@ -21,11 +22,13 @@ public interface ProblemService {
 
     void submitCode(SubmissionReq submissionReq, User user);
 
-    void JudgeSubmitResult(JudgeResult judgeResult);
+    void judgeSubmitResult(JudgeResult judgeResult);
 
-    List<Submission> SubmissionList(Long problemId, Long problemSetId, Long userId, JudgeStatus status, Language lang);
+    List<Submission> submissionList(Long problemId, Long problemSetId, Long userId, JudgeStatus status, Language lang);
 
-    Submission GetSubmissionDetail(long submissionId,User user);
+    Submission getSubmissionDetail(long submissionId, User user);
 
-    long CreateProblemSets(User user);
+    long createProblemSets(User user);
+
+    void editProblemSets(ProblemSets problemSets);
 }

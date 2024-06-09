@@ -1,4 +1,4 @@
-package com.oneq.programmingpracticeplatform.model.entity;
+package com.oneq.programmingpracticeplatform.model.entity.user;
 
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import lombok.AllArgsConstructor;

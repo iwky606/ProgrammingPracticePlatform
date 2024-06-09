@@ -3,8 +3,7 @@ package com.oneq.programmingpracticeplatform.controller;
 import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
-import com.oneq.programmingpracticeplatform.model.entity.User;
-import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
+import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
@@ -28,8 +27,23 @@ public class ProblemSetsController {
     @AuthCheck(mustRole = AuthEnum.TEACHER)
     public BaseResponse<Long> createProblemSets(HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
-        long id = problemService.CreateProblemSets(loginUser);
+        long id = problemService.createProblemSets(loginUser);
         return ResultUtils.success(id);
+    }
+
+    @PostMapping("/edit/info")
+    @AuthCheck(mustRole = AuthEnum.TEACHER)
+    public BaseResponse editProblemSetsInfo(HttpServletRequest req) {
+        User loginUser = userService.getLoginUser(req);
+
+        return ResultUtils.success(null);
+    }
+
+    @PostMapping("/edit/problem")
+    @AuthCheck(mustRole = AuthEnum.TEACHER)
+    public BaseResponse editProblemsSetsProblem(HttpServletRequest req) {
+
+        return ResultUtils.success(null);
     }
 
 }

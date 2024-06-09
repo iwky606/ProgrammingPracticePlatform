@@ -1,7 +1,6 @@
 package com.oneq.programmingpracticeplatform.model.vo;
 
-import com.oneq.programmingpracticeplatform.model.entity.User;
-import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
+import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import lombok.Data;
 import org.springframework.beans.BeanUtils;

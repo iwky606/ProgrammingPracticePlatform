@@ -3,17 +3,14 @@ package com.oneq.programmingpracticeplatform.service.impl;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.FileMapper;
-import com.oneq.programmingpracticeplatform.model.entity.File;
+import com.oneq.programmingpracticeplatform.model.entity.file.File;
 import com.oneq.programmingpracticeplatform.service.FileService;
-import io.swagger.models.auth.In;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.xml.datatype.Duration;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 

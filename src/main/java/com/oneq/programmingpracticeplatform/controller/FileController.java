@@ -5,7 +5,7 @@ import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
-import com.oneq.programmingpracticeplatform.model.entity.User;
+import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.service.FileService;
 import com.oneq.programmingpracticeplatform.service.UserService;

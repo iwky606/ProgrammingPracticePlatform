@@ -7,4 +7,8 @@
         INSERT INTO problem_sets (id, create_user, update_time)
         values (#{id}, #{createUser}, #{updateTime})
     </insert>
+    <update id="editProblemSets">
+        UPDATE problem_sets
+
+    </update>
 </mapper>

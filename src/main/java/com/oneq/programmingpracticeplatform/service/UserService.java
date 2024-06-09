@@ -1,6 +1,6 @@
 package com.oneq.programmingpracticeplatform.service;
 
-import com.oneq.programmingpracticeplatform.model.entity.User;
+import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 

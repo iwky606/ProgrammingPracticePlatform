@@ -1,4 +1,4 @@
-package com.oneq.programmingpracticeplatform.model.entity;
+package com.oneq.programmingpracticeplatform.model.entity.file;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

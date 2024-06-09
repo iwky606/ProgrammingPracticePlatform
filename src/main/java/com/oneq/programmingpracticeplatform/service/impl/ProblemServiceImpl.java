@@ -9,7 +9,8 @@ import com.oneq.programmingpracticeplatform.mapper.ProblemSetsMapper;
 import com.oneq.programmingpracticeplatform.mapper.SubmissionMapper;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.*;
-import com.oneq.programmingpracticeplatform.model.entity.User;
+import com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets;
+import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.JudgeConfig;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
@@ -150,7 +151,7 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public void JudgeSubmitResult(JudgeResult judgeResult) {
+    public void judgeSubmitResult(JudgeResult judgeResult) {
         Problem problemDetail = problemMapper.getProblemJudgeInfo(judgeResult.getJudgeId());
         List<String> outputs = fileService.getFilesByIds(problemDetail.getJudgeOutputs(), 3 * 60);
 
@@ -200,13 +201,13 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public List<Submission> SubmissionList(Long problemId, Long problemSetId, Long userId, JudgeStatus status, Language lang) {
+    public List<Submission> submissionList(Long problemId, Long problemSetId, Long userId, JudgeStatus status, Language lang) {
         List<Submission> submission = submissionMapper.getSubmissions(problemId, problemSetId, userId, status, lang);
         return submission;
     }
 
     @Override
-    public Submission GetSubmissionDetail(long submissionId, User user) {
+    public Submission getSubmissionDetail(long submissionId, User user) {
         Submission submission = submissionMapper.getSubmission(submissionId);
 
         // 可以优先通过的情况
@@ -226,11 +227,16 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public long CreateProblemSets(User user) {
+    public long createProblemSets(User user) {
         long now = System.currentTimeMillis();
         long id = snowflake.nextId();
         problemSetsMapper.createProblemSets(id, user.getId(), now);
         return id;
+    }
+
+    @Override
+    public void editProblemSets(ProblemSets problemSets) {
+        problemSetsMapper.editProblemSets(problemSets);
     }
 
     public void updateSubmission(Submission submission) {

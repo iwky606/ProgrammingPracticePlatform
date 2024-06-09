@@ -7,7 +7,7 @@ import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
-import com.oneq.programmingpracticeplatform.model.entity.User;
+import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
@@ -80,7 +80,7 @@ public class ProblemController {
             @RequestParam(value = "userId", required = false) Long userId,
             @RequestParam(value = "status", required = false) JudgeStatus status,
             @RequestParam(value = "lang", required = false) Language lang) {
-        List<Submission> submissions = problemService.SubmissionList(problemId, problemSetId, userId, status, lang);
+        List<Submission> submissions = problemService.submissionList(problemId, problemSetId, userId, status, lang);
         List<SubmissionVo> submissionVos = BeanUtil.copyToList(submissions, SubmissionVo.class);
 
         return ResultUtils.success(submissionVos);
@@ -91,7 +91,7 @@ public class ProblemController {
     @LoginRequired
     public BaseResponse<SubmissionVo> getSubmissionDetail(@RequestParam long id, HttpServletRequest req) {
         User user = userService.getLoginUser(req);
-        Submission submission = problemService.GetSubmissionDetail(id, user);
+        Submission submission = problemService.getSubmissionDetail(id, user);
         SubmissionVo resp = new SubmissionVo();
         BeanUtil.copyProperties(submission, resp);
         return ResultUtils.success(resp);

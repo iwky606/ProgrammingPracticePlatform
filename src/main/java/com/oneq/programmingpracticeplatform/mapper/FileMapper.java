@@ -1,6 +1,6 @@
 package com.oneq.programmingpracticeplatform.mapper;
 
-import com.oneq.programmingpracticeplatform.model.entity.File;
+import com.oneq.programmingpracticeplatform.model.entity.file.File;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;

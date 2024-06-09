@@ -1,6 +1,6 @@
 package com.oneq.programmingpracticeplatform.mapper;
 
-import com.oneq.programmingpracticeplatform.model.entity.User;
+import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;

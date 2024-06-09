@@ -7,12 +7,12 @@
 
 <mapper namespace="com.oneq.programmingpracticeplatform.mapper.UserMapper">
 
-    <resultMap id="userResultMap" type="com.oneq.programmingpracticeplatform.model.entity.User">
+    <resultMap id="userResultMap" type="com.oneq.programmingpracticeplatform.model.entity.user.User">
         <result property="auth" column="auth" javaType="com.oneq.programmingpracticeplatform.model.enums.AuthEnum"
                 typeHandler="com.oneq.programmingpracticeplatform.typehandler.enumhandler.AuthTypeHandler"/>
     </resultMap>
 
-    <insert id="insertUser" parameterType="com.oneq.programmingpracticeplatform.model.entity.User">
+    <insert id="insertUser" parameterType="com.oneq.programmingpracticeplatform.model.entity.user.User">
         INSERT INTO users (id, username, password, auth, create_time, update_time)
         VALUES (#{id}, #{username}, #{password}, #{auth}, #{createTime}, #{updateTime})
     </insert>

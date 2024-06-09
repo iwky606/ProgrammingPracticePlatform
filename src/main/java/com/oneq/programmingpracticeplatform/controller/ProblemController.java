@@ -1,8 +1,8 @@
 package com.oneq.programmingpracticeplatform.controller;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
+import com.oneq.programmingpracticeplatform.annotation.LoginRequired;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
@@ -69,6 +69,7 @@ public class ProblemController {
         return ResultUtils.success(null);
     }
 
+    // @formatter:off
     @GetMapping("/submissions")
     public BaseResponse<List<SubmissionVo>> getSubmissionList(
             @RequestParam(value = "problemId", required = false) Long problemId,
@@ -81,9 +82,15 @@ public class ProblemController {
 
         return ResultUtils.success(submissionVos);
     }
+    // @formatter:on
 
     @GetMapping("/submission/detail")
-    public BaseResponse<SubmissionVo> getSubmissionDetail(@RequestParam long id) {
-        return null;
+    @LoginRequired
+    public BaseResponse<SubmissionVo> getSubmissionDetail(@RequestParam long id, HttpServletRequest req) {
+        User user = userService.getLoginUser(req);
+        Submission submission = problemService.GetSubmissionDetail(id, user);
+        SubmissionVo resp = new SubmissionVo();
+        BeanUtil.copyProperties(submission, resp);
+        return ResultUtils.success(resp);
     }
 }

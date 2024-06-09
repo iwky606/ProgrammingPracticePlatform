@@ -24,4 +24,6 @@ public interface ProblemService {
     void JudgeSubmitResult(JudgeResult judgeResult);
 
     List<Submission> SubmissionList(Long problemId, Long problemSetId, Long userId, JudgeStatus status, Language lang);
+
+    Submission GetSubmissionDetail(long submissionId,User user);
 }

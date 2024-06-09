@@ -14,4 +14,6 @@ public interface SubmissionMapper {
     void updateSubmission(Submission submission);
 
     List<Submission> getSubmissions(Long problemId, Long problemSetsId, Long userId, JudgeStatus status, Language lang);
+
+    Submission getSubmission(long submissionId);
 }

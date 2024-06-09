@@ -48,5 +48,12 @@
             </if>
         </where>
     </select>
+    <select id="getSubmission"
+            resultMap="SubmissionMap"
+            resultType="com.oneq.programmingpracticeplatform.model.entity.submission.Submission">
+        SELECT *
+        FROM submission
+        WHERE id = #{submissionId}
+    </select>
 
 </mapper>

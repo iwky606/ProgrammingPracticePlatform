@@ -202,6 +202,26 @@ public class ProblemServiceImpl implements ProblemService {
         return submission;
     }
 
+    @Override
+    public Submission GetSubmissionDetail(long submissionId, User user) {
+        Submission submission = submissionMapper.getSubmission(submissionId);
+
+        // 可以优先通过的情况
+        if (user.getAuth().equals(AuthEnum.ADMIN)) {
+            return submission;
+        }
+        if (submission.getProblemSetsId() > 0 && user.getAuth().equals(AuthEnum.TEACHER)) {
+            // TODO: 题目集的拥有者可以查看代码
+        }
+
+        // 不通过的情况
+        if (user.getId() != submission.getUserId()) {
+            throw new BusinessException(ErrorCode.FORBIDDEN_ERROR, "无权查看该代码");
+        }
+
+        return submission;
+    }
+
     public void updateSubmission(Submission submission) {
         submissionMapper.updateSubmission(submission);
     }

@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Snowflake;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.ProblemMapper;
+import com.oneq.programmingpracticeplatform.mapper.ProblemSetsMapper;
 import com.oneq.programmingpracticeplatform.mapper.SubmissionMapper;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.*;
@@ -34,6 +35,8 @@ import java.util.concurrent.TimeUnit;
 public class ProblemServiceImpl implements ProblemService {
     @Resource
     ProblemMapper problemMapper;
+    @Resource
+    ProblemSetsMapper problemSetsMapper;
     @Resource
     UserService userService;
     @Resource
@@ -220,6 +223,14 @@ public class ProblemServiceImpl implements ProblemService {
         }
 
         return submission;
+    }
+
+    @Override
+    public long CreateProblemSets(User user) {
+        long now = System.currentTimeMillis();
+        long id = snowflake.nextId();
+        problemSetsMapper.createProblemSets(id, user.getId(), now);
+        return id;
     }
 
     public void updateSubmission(Submission submission) {

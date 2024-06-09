@@ -17,14 +17,11 @@ import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
 import com.oneq.programmingpracticeplatform.model.vo.SubmissionVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -62,6 +59,12 @@ public class ProblemController {
         return ResultUtils.success(ProblemVo.objToVo(problemDetail));
     }
 
+    @GetMapping("/problems")
+    public BaseResponse<List<ProblemVo>> getProblems(Long problemSetsId) {
+        log.info(problemSetsId + "");
+        return null;
+    }
+
     @PostMapping("/submit")
     public BaseResponse submitCode(@RequestBody SubmissionReq submission, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
@@ -93,4 +96,5 @@ public class ProblemController {
         BeanUtil.copyProperties(submission, resp);
         return ResultUtils.success(resp);
     }
+
 }

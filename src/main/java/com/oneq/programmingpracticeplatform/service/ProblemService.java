@@ -26,4 +26,6 @@ public interface ProblemService {
     List<Submission> SubmissionList(Long problemId, Long problemSetId, Long userId, JudgeStatus status, Language lang);
 
     Submission GetSubmissionDetail(long submissionId,User user);
+
+    long CreateProblemSets(User user);
 }

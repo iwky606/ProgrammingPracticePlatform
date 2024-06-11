@@ -7,5 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ProblemSetsMapper {
     void createProblemSets(long id, long createUser, long createTime, long updateTime);
 
-    void editProblemSets(ProblemSets problemSets);
+    void editProblemSetsInfo(ProblemSets problemSets);
+
+    Long getCreator(long problemSetsId);
 }

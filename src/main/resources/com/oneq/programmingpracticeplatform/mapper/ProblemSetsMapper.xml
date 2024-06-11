@@ -7,8 +7,24 @@
         INSERT INTO problem_sets (id, create_user, create_time, update_time)
         values (#{id}, #{createUser}, #{createTime}, #{updateTime})
     </insert>
-    <update id="editProblemSets">
+    <update id="editProblemSetsInfo">
         UPDATE problem_sets
-
+        <set>
+            update_time=#{updateTime},
+            <if test="openTime !=null and openTime > 0">
+                open_time=#{openTime},
+            </if>
+            <if test="endTime !=null and endTime > 0">
+                end_time=#{endTime},
+            </if>
+            <if test="info!=null">
+                info=#{info,typeHandler=com.oneq.programmingpracticeplatform.typehandler.prolemsetshandler.SetsInfoTypeHandler}
+            </if>
+        </set>
     </update>
+    <select id="getCreator" resultType="java.lang.Long">
+        SELECT create_user
+        FROM problem_sets
+        WHERE id = #{problemSetsId}
+    </select>
 </mapper>

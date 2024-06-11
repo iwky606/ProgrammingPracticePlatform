@@ -3,7 +3,7 @@ package com.oneq.programmingpracticeplatform.service;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
 import com.oneq.programmingpracticeplatform.model.dto.problem.JudgeResult;
-import com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets;
+import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsInfoRequest;
 import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
@@ -30,9 +30,9 @@ public interface ProblemService {
 
     long createProblemSets(User user);
 
-    void editProblemSets(ProblemSets problemSets);
+    void editProblemSets(EditSetsInfoRequest problemSets,User user);
 
-    List<Problem> getProblems(long problemSetsId, int pageSize, int pageNum);
+    List<Problem> getProblems(User user,long problemSetsId, int pageSize, int pageNum);
 
     int getProblemsSetsTotal(long problemSetsId);
 }

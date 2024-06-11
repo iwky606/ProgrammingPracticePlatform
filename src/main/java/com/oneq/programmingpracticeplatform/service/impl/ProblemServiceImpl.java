@@ -10,7 +10,7 @@ import com.oneq.programmingpracticeplatform.mapper.ProblemSetsProblemMapper;
 import com.oneq.programmingpracticeplatform.mapper.SubmissionMapper;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.*;
-import com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets;
+import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsInfoRequest;
 import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.JudgeConfig;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
@@ -238,12 +238,25 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public void editProblemSets(ProblemSets problemSets) {
-        problemSetsMapper.editProblemSets(problemSets);
+    public void editProblemSets(EditSetsInfoRequest problemSets, User user) {
+
+        // problemSetsMapper.editProblemSetsInfo(problemSets);
+    }
+
+    public Long getProblemSetsCreator(long problemSetsId) {
+        String key = "sets.creator." + problemSetsId;
+        Object o = redisTemplate.opsForValue().get(key);
+        Long creator = problemSetsMapper.getCreator(problemSetsId);
+        if (creator == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "未能找到题目");
+        }
+        return creator;
     }
 
     @Override
-    public List<Problem> getProblems(long problemSetsId, int pageSize, int pageNum) {
+    public List<Problem> getProblems(User user, long problemSetsId, int pageSize, int pageNum) {
+        // TODO: open_time check
+        // TOD: cahce
         int offSet = (pageNum - 1) * pageSize;
         List<Problem> problems = problemSetsProblemMapper.getProblems(problemSetsId, pageSize, offSet);
         return problems;

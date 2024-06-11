@@ -8,7 +8,7 @@ public class ProblemSets {
     private long createUser;
     private long createTime;
     private long updateTime;
-    private long openTime;
-    private long type;
+    private Long openTime;
+    private Long endTime;
     private SetsInfo info;
 }

@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 public class EditProblemRequest implements Serializable {
     private long id;
+    private String title;
     private ProblemDescription description;
     private List<String> tags;
     private ProblemSolution solution;

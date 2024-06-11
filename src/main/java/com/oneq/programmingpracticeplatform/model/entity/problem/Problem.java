@@ -10,11 +10,11 @@ import java.util.List;
 @Data
 @ToString
 public class Problem implements Serializable {
-    private long id;
-    private long creator;
+    private Long id;
+    private Long creator;
     private String title;
-    private long createTime;
-    private long updateTime;
+    private Long createTime;
+    private Long updateTime;
     private ProblemDescription description;
     private List<String> tags;
     private ProblemSolution solution;

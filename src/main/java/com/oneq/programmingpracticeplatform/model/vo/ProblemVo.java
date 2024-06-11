@@ -1,5 +1,6 @@
 package com.oneq.programmingpracticeplatform.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.oneq.programmingpracticeplatform.model.entity.problem.JudgeConfig;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.problem.ProblemDescription;
@@ -16,9 +17,10 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProblemVo implements Serializable {
     private long id;
-    private long creator;
+    private Long creator;
     private String title;
     private ProblemDescription description;
     private JudgeConfig judgeConfig;

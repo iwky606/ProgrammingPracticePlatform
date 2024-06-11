@@ -1,18 +1,21 @@
 package com.oneq.programmingpracticeplatform.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
+import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
+import com.oneq.programmingpracticeplatform.model.vo.ProblemSetsProblemVo;
+import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/problem_sets")
@@ -37,6 +40,16 @@ public class ProblemSetsController {
         User loginUser = userService.getLoginUser(req);
 
         return ResultUtils.success(null);
+    }
+
+    @GetMapping("/problems")
+    public BaseResponse<ProblemSetsProblemVo> getProblems(@RequestParam long id, int pageSize, int pageNum, HttpServletRequest req) {
+        User loginUser = userService.getLoginUser(req);
+        int total = problemService.getProblemsSetsTotal(id);
+        List<Problem> problems = problemService.getProblems(id, pageSize, pageNum);
+        List<ProblemVo> problemVos = BeanUtil.copyToList(problems, ProblemVo.class);
+        ProblemSetsProblemVo resp = new ProblemSetsProblemVo(total, problemVos);
+        return ResultUtils.success(resp);
     }
 
     @PostMapping("/edit/problem")

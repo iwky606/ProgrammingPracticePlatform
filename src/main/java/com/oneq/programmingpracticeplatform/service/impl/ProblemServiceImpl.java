@@ -6,6 +6,7 @@ import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.ProblemMapper;
 import com.oneq.programmingpracticeplatform.mapper.ProblemSetsMapper;
+import com.oneq.programmingpracticeplatform.mapper.ProblemSetsProblemMapper;
 import com.oneq.programmingpracticeplatform.mapper.SubmissionMapper;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.*;
@@ -39,6 +40,8 @@ public class ProblemServiceImpl implements ProblemService {
     @Resource
     ProblemSetsMapper problemSetsMapper;
     @Resource
+    ProblemSetsProblemMapper problemSetsProblemMapper;
+    @Resource
     UserService userService;
     @Resource
     FileService fileService;
@@ -67,7 +70,7 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public long updateProblem(EditProblemRequest editProblemRequest) {
         long timestamp = System.currentTimeMillis();
-        int updateNums = problemMapper.updateProblem(editProblemRequest.getId(), timestamp, editProblemRequest.getDescription(), editProblemRequest.getTags(), editProblemRequest.getSolution(), editProblemRequest.getJudgeConfig(), editProblemRequest.getVisible(), editProblemRequest.getJudgeInputs(), editProblemRequest.getJudgeOutputs());
+        int updateNums = problemMapper.updateProblem(editProblemRequest.getId(), timestamp, editProblemRequest.getTitle(), editProblemRequest.getDescription(), editProblemRequest.getTags(), editProblemRequest.getSolution(), editProblemRequest.getJudgeConfig(), editProblemRequest.getVisible(), editProblemRequest.getJudgeInputs(), editProblemRequest.getJudgeOutputs());
         if (updateNums == 0) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "修改失败");
         }
@@ -230,7 +233,7 @@ public class ProblemServiceImpl implements ProblemService {
     public long createProblemSets(User user) {
         long now = System.currentTimeMillis();
         long id = snowflake.nextId();
-        problemSetsMapper.createProblemSets(id, user.getId(), now);
+        problemSetsMapper.createProblemSets(id, user.getId(), now, now);
         return id;
     }
 
@@ -239,9 +242,26 @@ public class ProblemServiceImpl implements ProblemService {
         problemSetsMapper.editProblemSets(problemSets);
     }
 
+    @Override
+    public List<Problem> getProblems(long problemSetsId, int pageSize, int pageNum) {
+        int offSet = (pageNum - 1) * pageSize;
+        List<Problem> problems = problemSetsProblemMapper.getProblems(problemSetsId, pageSize, offSet);
+        return problems;
+    }
+
+    public int getProblemsSetsTotal(long problemSetsId) {
+        String key = "problems.total." + problemSetsId;
+        Object o = redisTemplate.opsForValue().get(key);
+        if (o != null) {
+            return (Integer) o;
+        }
+        int total = problemSetsProblemMapper.getProblemsTotal(problemSetsId);
+        redisTemplate.opsForValue().set(key, total, 3, TimeUnit.HOURS);
+        return total;
+    }
+
     public void updateSubmission(Submission submission) {
         submissionMapper.updateSubmission(submission);
     }
-
 
 }

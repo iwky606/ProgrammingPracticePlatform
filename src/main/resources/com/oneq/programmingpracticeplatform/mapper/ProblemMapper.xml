@@ -27,6 +27,9 @@
         UPDATE problem
         <set>
             update_time=#{updateTime},
+            <if test="title!=null and title!=''">
+                title=#{title},
+            </if>
             <if test="description != null and description != ''">
                 description =
                 #{description,typeHandler=com.oneq.programmingpracticeplatform.typehandler.problemhandler.ProblemDescriptionTypeHandler},

@@ -31,4 +31,8 @@ public interface ProblemService {
     long createProblemSets(User user);
 
     void editProblemSets(ProblemSets problemSets);
+
+    List<Problem> getProblems(long problemSetsId, int pageSize, int pageNum);
+
+    int getProblemsSetsTotal(long problemSetsId);
 }

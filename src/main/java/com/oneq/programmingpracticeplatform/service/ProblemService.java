@@ -9,6 +9,7 @@ import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.JudgeStatus;
 import com.oneq.programmingpracticeplatform.model.enums.Language;
+import io.swagger.models.auth.In;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -34,5 +35,5 @@ public interface ProblemService {
 
     List<Problem> getProblems(User user,long problemSetsId, int pageSize, int pageNum);
 
-    int getProblemsSetsTotal(long problemSetsId);
+    Integer getProblemsSetsTotal(long problemSetsId);
 }

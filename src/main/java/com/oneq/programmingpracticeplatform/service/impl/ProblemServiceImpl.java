@@ -2,6 +2,7 @@ package com.oneq.programmingpracticeplatform.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Snowflake;
+import com.oneq.programmingpracticeplatform.annotation.Cache;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.ProblemMapper;
@@ -256,20 +257,15 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public List<Problem> getProblems(User user, long problemSetsId, int pageSize, int pageNum) {
         // TODO: open_time check
-        // TOD: cahce
+        // TODO: cahce
         int offSet = (pageNum - 1) * pageSize;
         List<Problem> problems = problemSetsProblemMapper.getProblems(problemSetsId, pageSize, offSet);
         return problems;
     }
 
-    public int getProblemsSetsTotal(long problemSetsId) {
-        String key = "problems.total." + problemSetsId;
-        Object o = redisTemplate.opsForValue().get(key);
-        if (o != null) {
-            return (Integer) o;
-        }
+    @Cache(key = "sets.total", expire = 3, timeUnit = TimeUnit.HOURS)
+    public Integer getProblemsSetsTotal(long problemSetsId) {
         int total = problemSetsProblemMapper.getProblemsTotal(problemSetsId);
-        redisTemplate.opsForValue().set(key, total, 3, TimeUnit.HOURS);
         return total;
     }
 

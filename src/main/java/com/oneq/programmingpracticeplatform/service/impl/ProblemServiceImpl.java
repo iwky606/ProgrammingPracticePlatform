@@ -250,7 +250,9 @@ public class ProblemServiceImpl implements ProblemService {
 
         if (req.getOpenTime() != null || req.getEndTime() != null) {
             Problem problem = new Problem();
-            // problem.setId();
+            problem.setOpenTime(req.getOpenTime());
+            problem.setEndTime(req.getEndTime());
+            problemMapper.updateProblemDurationTime(problem, req.getId());
         }
     }
 

@@ -19,4 +19,6 @@ public interface ProblemMapper {
     int hasProblem(long problemId);
 
     Problem getProblemWithoutAuth(Long id, long now);
+
+    void updateProblemDurationTime(Problem problem,long problemSetsId);
 }

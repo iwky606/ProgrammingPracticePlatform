@@ -124,4 +124,5 @@ create index username_2
 
 解决：
    最终决定给题目加上两个冗余的字段,open_time,end_time,这样同时限制题目只能属于一个题目集
-   冗余数据也方便查询
+   冗余数据方便查询，节约查看题目详情时间。但是是会在更新problem_sets的题目集时间的时候修改problem
+   因此会降低修改的速度

@@ -65,6 +65,23 @@
         </set>
         WHERE id=#{id};
     </update>
+    <update id="updateProblemDurationTime">
+        UPDATE problem
+        <set>
+            <if test="openTime != null">
+                openTime=#{openTime}
+            </if>
+            <if test="endTime != null">
+                endTime=#{endTime}
+            </if>
+        </set>
+        WHERE id in
+        (
+        SELECT problem_id
+        FROM problem_sets_problem
+        WHERE problem_sets_id=#{problemSetsId}
+        )
+    </update>
 
     <select id="getProblemDetail"
             resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem"
@@ -92,14 +109,16 @@
     <select id="getProblemJudgeInfo"
             resultMap="ProblemMap"
             resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
-        SELECT judge_outputs,judge_config
-        FROM problem as p,submission as s
-        WHERE s.id = #{id} and p.id=s.problem_id
+        SELECT judge_outputs, judge_config
+        FROM problem as p,
+             submission as s
+        WHERE s.id = #{id}
+          and p.id = s.problem_id
     </select>
     <select id="hasProblem" resultType="java.lang.Integer">
         SELECT count(1)
         FROM problem
-        WHERE id=#{problemId}
+        WHERE id = #{problemId}
     </select>
     <select id="getProblemWithoutAuth"
             resultMap="ProblemMap"

@@ -99,4 +99,9 @@ public class UserServiceImpl implements UserService {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "修改失败，用户不存在");
         }
     }
+
+    @Override
+    public void logout(HttpServletRequest request) {
+        request.getSession().removeAttribute(USER_LOGIN_STATE);
+    }
 }

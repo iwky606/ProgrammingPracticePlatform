@@ -14,4 +14,6 @@ public interface UserService {
     User getLoginUser(HttpServletRequest request);
 
     void updateUserAuth(String username, AuthEnum auth);
+
+    void logout(HttpServletRequest request);
 }

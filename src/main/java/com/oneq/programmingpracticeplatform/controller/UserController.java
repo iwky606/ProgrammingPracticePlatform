@@ -1,6 +1,7 @@
 package com.oneq.programmingpracticeplatform.controller;
 
 import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
+import com.oneq.programmingpracticeplatform.annotation.LoginRequired;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
@@ -61,5 +62,12 @@ public class UserController {
         userService.updateUserAuth(username, EnumUtil.getEnumByValue(AuthEnum.class, auth));
 
         return ResultUtils.success("修改成功");
+    }
+
+    @PostMapping("/logout")
+    @LoginRequired
+    public BaseResponse logout(HttpServletRequest req) {
+        userService.logout(req);
+        return ResultUtils.success(null);
     }
 }

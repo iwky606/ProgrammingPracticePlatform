@@ -68,11 +68,11 @@
     <update id="updateProblemDurationTime">
         UPDATE problem
         <set>
-            <if test="openTime != null">
-                openTime=#{openTime}
+            <if test="problem.openTime != null">
+                open_time=#{problem.openTime},
             </if>
-            <if test="endTime != null">
-                endTime=#{endTime}
+            <if test="problem.endTime != null">
+                end_time=#{problem.endTime},
             </if>
         </set>
         WHERE id in

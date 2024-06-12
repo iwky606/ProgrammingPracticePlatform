@@ -67,10 +67,10 @@ public class ProblemController {
     }
 
     @PostMapping("/submit")
-    public BaseResponse submitCode(@RequestBody SubmissionReq submission, HttpServletRequest req) {
+    public BaseResponse<Long> submitCode(@RequestBody SubmissionReq submission, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
-        problemService.submitCode(submission, loginUser);
-        return ResultUtils.success(null);
+        long submissionId = problemService.submitCode(submission, loginUser);
+        return ResultUtils.success(submissionId);
     }
 
     // @formatter:off

@@ -119,7 +119,7 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public void submitCode(SubmissionReq submissionReq, User user) {
+    public long submitCode(SubmissionReq submissionReq, User user) {
         long now = System.currentTimeMillis();
 
         if (user == null) {
@@ -127,8 +127,8 @@ public class ProblemServiceImpl implements ProblemService {
         }
         Submission submission = new Submission();
         BeanUtil.copyProperties(submissionReq, submission);
-        long id = snowflake.nextId();
-        submission.setId(id);
+        long submissionId = snowflake.nextId();
+        submission.setId(submissionId);
         submission.setUserId(user.getId());
         submission.setSubmissionTime(now);
         submissionMapper.createSubmission(submission);
@@ -143,6 +143,7 @@ public class ProblemServiceImpl implements ProblemService {
         BeanUtil.copyProperties(problemDetail.getJudgeConfig(), resourceLimit);
         JudgeTask judgeTask = new JudgeTask(submission.getId(), filesByIds, submission.getCode(), submission.getLang(), resourceLimit, null);
         rabbitTemplate.convertAndSend("judge.queue", judgeTask);
+        return submissionId;
     }
 
     @Override

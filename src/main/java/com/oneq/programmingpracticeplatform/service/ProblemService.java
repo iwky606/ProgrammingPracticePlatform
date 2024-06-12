@@ -22,7 +22,7 @@ public interface ProblemService {
 
     Problem getProblemDetail(Long id, User user);
 
-    void submitCode(SubmissionReq submissionReq, User user);
+    long submitCode(SubmissionReq submissionReq, User user);
 
     void judgeSubmitResult(JudgeResult judgeResult);
 

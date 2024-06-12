@@ -15,5 +15,5 @@ public interface ProblemSetsMapper {
 
     ProblemSets getProblemSetsDetail(long id);
 
-    List<Long> getSetsCreatorByProblemAndTime(long problemId, long now);
+    ProblemSets getProblemSetsBySubmission(long submissionId);
 }

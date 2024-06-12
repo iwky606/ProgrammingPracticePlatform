@@ -103,10 +103,6 @@ public class ProblemServiceImpl implements ProblemService {
         return problem;
     }
 
-    public List<Long> getProblemSetsByProblemAndTime(long problemId, long now) {
-        return problemSetsMapper.getSetsCreatorByProblemAndTime(problemId, now);
-    }
-
     @Cache(key = "problem.detail", expire = 15, timeUnit = TimeUnit.MINUTES)
     public Problem getProblemDetailWithCache(long id) {
         // 一定非法的id
@@ -213,7 +209,10 @@ public class ProblemServiceImpl implements ProblemService {
             return submission;
         }
         if (submission.getProblemSetsId() > 0 && user.getAuth().equals(AuthEnum.TEACHER)) {
-            // TODO: 题目集的拥有者可以查看代码
+            ProblemSets problemSets = problemSetsMapper.getProblemSetsBySubmission(submissionId);
+            if (problemSets.getCreateUser() == user.getId()) {
+                return submission;
+            }
         }
 
         // 不通过的情况

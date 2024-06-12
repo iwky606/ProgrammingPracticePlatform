@@ -146,7 +146,7 @@ public class ProblemServiceImpl implements ProblemService {
         if (problemDetail == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "提交的题目不存在");
         }
-        String[] filesByIds = fileService.getFilesByIds(problemDetail.getJudgeInputs(), 60 * 15).toArray(new String[problemDetail.getJudgeInputs().size()]);
+        String[] filesByIds = fileService.getIOFiles(problemDetail.getJudgeInputs()).toArray(new String[problemDetail.getJudgeInputs().size()]);
 
         ResourceLimit resourceLimit = new ResourceLimit();
         BeanUtil.copyProperties(problemDetail.getJudgeConfig(), resourceLimit);
@@ -157,7 +157,7 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public void judgeSubmitResult(JudgeResult judgeResult) {
         Problem problemDetail = problemMapper.getProblemJudgeInfo(judgeResult.getJudgeId());
-        List<String> outputs = fileService.getFilesByIds(problemDetail.getJudgeOutputs(), 3 * 60);
+        List<String> outputs = fileService.getIOFiles(problemDetail.getJudgeOutputs());
 
         Submission submission = new Submission();
         submission.setId(judgeResult.getJudgeId());

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 @Aspect
 @Component
@@ -21,6 +23,9 @@ public class CacheAspect {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Resource
+    private Random random;
 
     @Around("@annotation(cache)")
     public Object cache(ProceedingJoinPoint joinPoint, Cache cache) throws Throwable {
@@ -42,8 +47,10 @@ public class CacheAspect {
         }
 
         Object result = joinPoint.proceed();
-        redisTemplate.opsForValue().set(key, result, cache.expire(), cache.timeUnit());
-
+        // 统一换算成ms, 添加上随机时间
+        long expire = cache.timeUnit().toMillis(cache.expire()) + TimeUnit.SECONDS.toMillis(getRandTime(cache.randTime()));
+        log.info("expire time:" + expire);
+        redisTemplate.opsForValue().set(key, result, expire, TimeUnit.MILLISECONDS);
         return result;
     }
 
@@ -55,4 +62,7 @@ public class CacheAspect {
         return sb.toString();
     }
 
+    private long getRandTime(int bound) {
+        return random.nextInt(bound);
+    }
 }

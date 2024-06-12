@@ -1,10 +1,12 @@
 package com.oneq.programmingpracticeplatform.service.impl;
 
+import com.oneq.programmingpracticeplatform.annotation.Cache;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.mapper.FileMapper;
 import com.oneq.programmingpracticeplatform.model.entity.file.File;
 import com.oneq.programmingpracticeplatform.service.FileService;
+import io.swagger.models.auth.In;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,22 +44,14 @@ public class FileServiceImpl implements FileService {
         return fileEntity.getId();
     }
 
-    /*
-    * cacheTime单位为秒
-    * */
     @Override
-    public List<String> getFilesByIds(List<Integer> ids, long cacheTime) {
-        if (cacheTime > 0) {
-            Object res = redisTemplate.opsForValue().get(getCacheKey(ids));
-            if (res != null) {
-                return (List<String>) res;
-            }
-        }
-        List<String> files = fileMapper.findFiles(ids);
-        if (cacheTime > 0 && files != null && !files.isEmpty()) {
-            redisTemplate.opsForValue().set(getCacheKey(ids), files, cacheTime, TimeUnit.SECONDS);
-        }
-        return files;
+    @Cache(key = "file.io", expire = 5, timeUnit = TimeUnit.MINUTES)
+    public List<String> getIOFiles(List<Integer> ids) {
+        return getFilesByIds(ids);
+    }
+
+    public List<String> getFilesByIds(List<Integer> ids) {
+        return fileMapper.findFiles(ids);
     }
 
     public String getCacheKey(List<Integer> ids) {

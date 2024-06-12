@@ -11,7 +11,9 @@ import java.util.concurrent.TimeUnit;
 public @interface Cache {
     String key();
 
-    int expire() default 10;
+    int expire();
 
-    TimeUnit timeUnit() default TimeUnit.MINUTES;
+    TimeUnit timeUnit();
+
+    int randTime() default 60;// 随机expire时间，单位为秒
 }

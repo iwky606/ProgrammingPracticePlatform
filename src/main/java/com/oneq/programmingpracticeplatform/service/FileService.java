@@ -7,5 +7,5 @@ import java.util.List;
 public interface FileService {
     int storeFile(MultipartFile file, long uploader);
 
-    List<String> getFilesByIds(List<Integer> ids,long cacheTime);
+    List<String> getIOFiles(List<Integer> ids);
 }

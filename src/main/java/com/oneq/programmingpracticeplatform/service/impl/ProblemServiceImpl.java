@@ -29,6 +29,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -129,6 +130,7 @@ public class ProblemServiceImpl implements ProblemService {
         submission.setId(submissionId);
         submission.setUserId(user.getId());
         submission.setSubmissionTime(now);
+
         submissionMapper.createSubmission(submission);
 
         Problem problemDetail = getProblemDetailWithCache(submission.getProblemId());
@@ -232,6 +234,7 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
+    @Transactional
     public void editProblemSets(EditSetsInfoRequest req, User user) {
         Long creator = getProblemSetsCreator(req.getId());
         if (!user.getAuth().equals(AuthEnum.ADMIN)) {
@@ -244,6 +247,11 @@ public class ProblemServiceImpl implements ProblemService {
         long now = System.currentTimeMillis();
         problemSets.setUpdateTime(now);
         problemSetsMapper.editProblemSetsInfo(problemSets);
+
+        if (req.getOpenTime() != null || req.getEndTime() != null) {
+            Problem problem = new Problem();
+            // problem.setId();
+        }
     }
 
     @Cache(key = "sets.creator", expire = 5, timeUnit = TimeUnit.MINUTES)
@@ -274,15 +282,26 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
+    @Transactional // 添加事务保证数据一致性
     public void setsAddProblem(EditSetsProblemRequest edit, User req) {
         int count = problemMapper.hasProblem(edit.getProblemId());
         if (count == 0) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "无效的题目id");
         }
+
+        ProblemSets problemSetsDetail = problemSetsMapper.getProblemSetsDetail(edit.getProblemSetsId());
+        if (problemSetsDetail == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "无效的题目集id");
+        }
         try {
             problemSetsProblemMapper.addProblem(edit.getProblemSetsId(), edit.getProblemId());
+            Problem problem = new Problem();
+            problem.setId(edit.getProblemId());
+            problem.setOpenTime(problemSetsDetail.getOpenTime());
+            problem.setEndTime(problemSetsDetail.getEndTime());
+            problemMapper.updateProblem(problem);
         } catch (DuplicateKeyException e) {
-            throw new BusinessException(ErrorCode.OPERATION_ERROR, "已经添加了这个题目");
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "这个题目已经被其他题目占用或者您已添加这个题目到该题目集");
         }
         expireSetsTotalCache(edit.getProblemSetsId());
     }

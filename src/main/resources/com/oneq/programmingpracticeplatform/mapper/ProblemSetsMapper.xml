@@ -26,6 +26,7 @@
                 info=#{info,typeHandler=com.oneq.programmingpracticeplatform.typehandler.prolemsetshandler.SetsInfoTypeHandler}
             </if>
         </set>
+        WHERE id=#{id}
     </update>
     <select id="getCreator" resultType="java.lang.Long">
         SELECT create_user

@@ -20,7 +20,5 @@ public class EditProblemRequest implements Serializable {
     private List<Integer> judgeInputs;
     private List<Integer> judgeOutputs;
     private ProblemVisibleEnum visible;
-    private Long openTime;
-    private Long endTime;
     private static final long serialVersionUID = 1L;
 }

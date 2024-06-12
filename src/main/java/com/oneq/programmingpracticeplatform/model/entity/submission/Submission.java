@@ -22,6 +22,6 @@ public class Submission {
     private JudgeStatus status;
     private int execTime;
     private int execMemory;
-    private long ProblemSetsId;
+    private long problemSetsId;
 }
 

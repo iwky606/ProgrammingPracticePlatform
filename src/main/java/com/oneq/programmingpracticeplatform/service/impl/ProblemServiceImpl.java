@@ -21,7 +21,6 @@ import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.enums.JudgeStatus;
 import com.oneq.programmingpracticeplatform.model.enums.Language;
-import com.oneq.programmingpracticeplatform.model.enums.ProblemVisibleEnum;
 import com.oneq.programmingpracticeplatform.service.FileService;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
@@ -74,7 +73,11 @@ public class ProblemServiceImpl implements ProblemService {
     @Override
     public long updateProblem(EditProblemRequest editProblemRequest) {
         long timestamp = System.currentTimeMillis();
-        int updateNums = problemMapper.updateProblem(editProblemRequest.getId(), timestamp, editProblemRequest.getTitle(), editProblemRequest.getDescription(), editProblemRequest.getTags(), editProblemRequest.getSolution(), editProblemRequest.getJudgeConfig(), editProblemRequest.getVisible(), editProblemRequest.getJudgeInputs(), editProblemRequest.getJudgeOutputs());
+        Problem problem = new Problem();
+        BeanUtil.copyProperties(editProblemRequest, problem);
+        problem.setUpdateTime(timestamp);
+
+        int updateNums = problemMapper.updateProblem(problem);
         if (updateNums == 0) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "修改失败");
         }
@@ -86,25 +89,18 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public Problem getProblemDetail(Long id, User user) {
-        Problem problemDetail = problemMapper.getProblemDetail(id);
-        if (problemDetail == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目不存在");
+        // 如果是管理员、教师是可以直接查看的
+        if (user != null && (user.getAuth().equals(AuthEnum.ADMIN) || user.getAuth().equals(AuthEnum.TEACHER))) {
+
+            return getProblemDetailWithCache(id);
         }
 
-        // 如果是题目拥有者或者是管理员是可以直接查看的
-        if (user != null && (user.getAuth().equals(AuthEnum.ADMIN) || user.getId() == problemDetail.getCreator())) {
-            return problemDetail;
+        long now = System.currentTimeMillis();
+        Problem problem = problemMapper.getProblemWithoutAuth(id, now);
+        if (problem.getEndTime() != 0 && problem.getEndTime() > now) {
+            problem.setTags(null);
         }
-
-        // 否则判断权限情况
-        if (problemDetail.getVisible() == null || problemDetail.getVisible().equals(ProblemVisibleEnum.PRIVATE)) {
-            throw new BusinessException(ErrorCode.FORBIDDEN_ERROR, "题目未公开");
-        }
-
-        // TODO: 题目处于竞赛中的情况
-
-
-        return problemDetail;
+        return problem;
     }
 
     public List<Long> getProblemSetsByProblemAndTime(long problemId, long now) {
@@ -258,7 +254,7 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public List<Problem> getProblems(User user, long problemSetsId, int pageSize, int pageNum) {
+    public List<Problem> getSetsProblems(User user, long problemSetsId, int pageSize, int pageNum) {
         // TODO: open_time check
         // TODO: cahce
         int offSet = (pageNum - 1) * pageSize;

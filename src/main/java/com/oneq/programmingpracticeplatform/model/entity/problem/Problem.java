@@ -20,6 +20,8 @@ public class Problem implements Serializable {
     private ProblemSolution solution;
     private JudgeConfig judgeConfig;
     private ProblemVisibleEnum visible;
+    private Long openTime;
+    private Long endTime;
     private List<Integer> judgeInputs;
     private List<Integer> judgeOutputs;
     private static final long serialVersionUID = 1L;

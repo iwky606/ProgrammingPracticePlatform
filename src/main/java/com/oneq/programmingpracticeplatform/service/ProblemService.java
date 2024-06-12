@@ -34,7 +34,7 @@ public interface ProblemService {
 
     void editProblemSets(EditSetsInfoRequest problemSets, User user);
 
-    List<Problem> getProblems(User user, long problemSetsId, int pageSize, int pageNum);
+    List<Problem> getSetsProblems(User user, long problemSetsId, int pageSize, int pageNum);
 
     Integer getProblemsSetsTotal(long problemSetsId);
 

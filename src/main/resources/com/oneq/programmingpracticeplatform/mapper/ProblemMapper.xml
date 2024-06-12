@@ -56,6 +56,12 @@
                 judge_outputs =
                 #{judgeOutputs,typeHandler=com.oneq.programmingpracticeplatform.typehandler.IntegerToJsonTypeHandler},
             </if>
+            <if test="openTime!=null">
+                open_time=#{openTime},
+            </if>
+            <if test="openTime!=null">
+                end_time=#{endTime},
+            </if>
         </set>
         WHERE id=#{id};
     </update>
@@ -94,6 +100,21 @@
         SELECT count(1)
         FROM problem
         WHERE id=#{problemId}
+    </select>
+    <select id="getProblemWithoutAuth"
+            resultMap="ProblemMap"
+            resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
+        SELECT id,
+               title,
+               description,
+               tags,
+               solution,
+               judge_config,
+               open_time,
+               end_time
+        FROM problem
+        WHERE id = #{id}
+          AND open_time &lt; #{now}
     </select>
 
 </mapper>

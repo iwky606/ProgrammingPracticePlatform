@@ -55,7 +55,7 @@ public class ProblemSetsController {
         int total = problemService.getProblemsSetsTotal(id);
 
         // 获取题目id列表
-        List<Problem> problems = problemService.getProblems(loginUser, id, pageSize, pageNum);
+        List<Problem> problems = problemService.getSetsProblems(loginUser, id, pageSize, pageNum);
         List<ProblemVo> problemVos = BeanUtil.copyToList(problems, ProblemVo.class);
         ProblemListVo problemList = new ProblemListVo(total, problemVos);
 

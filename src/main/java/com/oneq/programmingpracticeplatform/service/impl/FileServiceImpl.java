@@ -21,9 +21,6 @@ public class FileServiceImpl implements FileService {
     @Resource
     private FileMapper fileMapper;
 
-    @Resource
-    private RedisTemplate<String, Object> redisTemplate;
-
     public int storeFile(MultipartFile file, long uploader) {
         String fileName = file.getOriginalFilename();
 

@@ -26,7 +26,6 @@ import com.oneq.programmingpracticeplatform.service.FileService;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -34,7 +33,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -107,25 +105,13 @@ public class ProblemServiceImpl implements ProblemService {
         return problemDetail;
     }
 
-    /**
-     * cacheTime单位为秒
-     */
-    public Problem getProblemDetailWithCache(long id, long cacheTime) {
+    @Cache(key = "problem.detail", expire = 15, timeUnit = TimeUnit.MINUTES)
+    public Problem getProblemDetailWithCache(long id) {
         // 一定非法的id
         if (id <= 1000000000000000000L) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "题目不存在");
         }
-        if (cacheTime > 0) {
-            Object res = redisTemplate.opsForValue().get(problemCacheKey(id));
-            if (res != null) {
-                return (Problem) res;
-            }
-        }
-        Problem problemDetail = problemMapper.getProblemDetail(id);
-        if (cacheTime > 0 && problemDetail != null) {
-            redisTemplate.opsForValue().set(problemCacheKey(id), problemDetail, cacheTime, TimeUnit.SECONDS);
-        }
-        return problemDetail;
+        return problemMapper.getProblemDetail(id);
     }
 
     private String problemCacheKey(long id) {
@@ -147,7 +133,7 @@ public class ProblemServiceImpl implements ProblemService {
         submission.setSubmissionTime(now);
         submissionMapper.createSubmission(submission);
 
-        Problem problemDetail = getProblemDetailWithCache(submission.getProblemId(), 60 * 15);
+        Problem problemDetail = getProblemDetailWithCache(submission.getProblemId());
         if (problemDetail == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "提交的题目不存在");
         }
@@ -298,7 +284,7 @@ public class ProblemServiceImpl implements ProblemService {
 
     @Override
     public void setsDelProblem(EditSetsProblemRequest edit, User req) {
-        problemSetsProblemMapper.delProblem(edit.getProblemSetsId(),edit.getProblemId());
+        problemSetsProblemMapper.delProblem(edit.getProblemSetsId(), edit.getProblemId());
     }
 
     public void updateSubmission(Submission submission) {

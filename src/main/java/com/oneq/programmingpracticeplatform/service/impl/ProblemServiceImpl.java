@@ -102,7 +102,13 @@ public class ProblemServiceImpl implements ProblemService {
         }
 
         // TODO: 题目处于竞赛中的情况
+
+
         return problemDetail;
+    }
+
+    public List<Long> getProblemSetsByProblemAndTime(long problemId, long now) {
+        return problemSetsMapper.getSetsCreatorByProblemAndTime(problemId, now);
     }
 
     @Cache(key = "problem.detail", expire = 15, timeUnit = TimeUnit.MINUTES)

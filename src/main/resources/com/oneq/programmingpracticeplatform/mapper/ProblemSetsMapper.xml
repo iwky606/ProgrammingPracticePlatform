@@ -37,6 +37,15 @@
             resultType="com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets">
         SELECT *
         FROM problem_sets
-        WHERE id=#{id}
+        WHERE id = #{id}
+    </select>
+
+    <select id="getSetsCreatorByProblemAndTime" resultType="java.lang.Long">
+        SELECT create_user
+        FROM problem_sets as ps,
+             problem_sets_problem as psp
+        WHERE psp.problem_id = #{problemId}
+          AND psp.problem_sets_id = ps.id
+          AND end_time > #{now}
     </select>
 </mapper>

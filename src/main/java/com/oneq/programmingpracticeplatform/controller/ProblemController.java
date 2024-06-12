@@ -55,7 +55,6 @@ public class ProblemController {
     @GetMapping("/detail")
     public BaseResponse<ProblemVo> getProblem(@RequestParam long id, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
-
         Problem problemDetail = problemService.getProblemDetail(id, loginUser);
         return ResultUtils.success(ProblemVo.objToVo(problemDetail));
     }

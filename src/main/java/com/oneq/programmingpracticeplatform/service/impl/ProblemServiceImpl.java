@@ -302,6 +302,13 @@ public class ProblemServiceImpl implements ProblemService {
         return problemSetsMapper.getProblemSetsDetail(id);
     }
 
+    @Override
+    public List<ProblemSets> getAllProblemSets(int pageSize, int pageNum) {
+        int offSet = (pageNum - 1) * pageSize;
+        return problemSetsMapper.getAllProblemSetsList(offSet, pageSize);
+    }
+
+
     public void updateSubmission(Submission submission) {
         submissionMapper.updateSubmission(submission);
     }

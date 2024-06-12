@@ -45,4 +45,6 @@ public interface ProblemService {
     void setsDelProblem(EditSetsProblemRequest edit, User req);
 
     ProblemSets getProblemSetsDetail(long id);
+
+    List<ProblemSets> getAllProblemSets(int pageSize, int pageNum);
 }

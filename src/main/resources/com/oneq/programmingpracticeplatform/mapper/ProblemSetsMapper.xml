@@ -48,5 +48,14 @@
         WHERE psp.problem_id = s.problem_id
           AND ps.id = psp.problem_sets_id
     </select>
+    <select id="getAllProblemSetsList"
+            resultMap="ProblemSetsMap"
+            resultType="com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets">
+        SELECT *
+        FROM problem_sets
+        ORDER BY create_time DESC
+            LIMIT #{limit}
+        OFFSET #{offSet}
+    </select>
 
 </mapper>

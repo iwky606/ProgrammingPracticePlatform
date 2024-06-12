@@ -16,4 +16,6 @@ public interface ProblemSetsMapper {
     ProblemSets getProblemSetsDetail(long id);
 
     ProblemSets getProblemSetsBySubmission(long submissionId);
+
+    List<ProblemSets> getAllProblemSetsList(int offSet, int limit);
 }

@@ -10,9 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProblemSetsVO {
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private ProblemListVo problemList;
-
     private long id;
     private long createUser;
     private long createTime;

@@ -16,6 +16,7 @@ import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -38,6 +39,13 @@ public class ProblemSetsController {
         User loginUser = userService.getLoginUser(req);
         long id = problemService.createProblemSets(loginUser);
         return ResultUtils.success(id);
+    }
+
+    @GetMapping("/sets_lists")
+    public BaseResponse<List<ProblemSetsVO>> getProblemSetsList(@RequestParam int pageSize, int pageNum) {
+        List<ProblemSets> problemSets = problemService.getAllProblemSets(pageSize, pageNum);
+        List<ProblemSetsVO> problemSetsVOS = BeanUtil.copyToList(problemSets, ProblemSetsVO.class);
+        return ResultUtils.success(problemSetsVOS);
     }
 
     @PostMapping("/edit/info")

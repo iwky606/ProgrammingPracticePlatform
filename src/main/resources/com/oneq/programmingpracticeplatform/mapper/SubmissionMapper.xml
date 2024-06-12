@@ -47,6 +47,7 @@
                 lang=#{lang,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.LangTypeHandler}
             </if>
         </where>
+        ORDER BY submission_time DESC
     </select>
     <select id="getSubmission"
             resultMap="SubmissionMap"

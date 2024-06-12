@@ -90,5 +90,10 @@
         FROM problem as p,submission as s
         WHERE s.id = #{id} and p.id=s.problem_id
     </select>
+    <select id="hasProblem" resultType="java.lang.Integer">
+        SELECT count(1)
+        FROM problem
+        WHERE id=#{problemId}
+    </select>
 
 </mapper>

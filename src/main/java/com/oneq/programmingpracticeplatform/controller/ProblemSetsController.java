@@ -5,10 +5,11 @@ import com.oneq.programmingpracticeplatform.annotation.AuthCheck;
 import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsInfoRequest;
+import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsProblemRequest;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
-import com.oneq.programmingpracticeplatform.model.vo.ProblemSetsProblemVo;
+import com.oneq.programmingpracticeplatform.model.vo.ProblemListVo;
 import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
@@ -39,25 +40,33 @@ public class ProblemSetsController {
     @AuthCheck(mustRole = AuthEnum.TEACHER)
     public BaseResponse editProblemSetsInfo(EditSetsInfoRequest editSetsInfo, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
-        problemService.editProblemSets(editSetsInfo,loginUser);
+        problemService.editProblemSets(editSetsInfo, loginUser);
         return ResultUtils.success(null);
     }
 
     @GetMapping("/problems")
-    public BaseResponse<ProblemSetsProblemVo> getProblems(@RequestParam long id, int pageSize, int pageNum, HttpServletRequest req) {
+    public BaseResponse<ProblemListVo> getProblems(@RequestParam long id, int pageSize, int pageNum, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
         int total = problemService.getProblemsSetsTotal(id);
         List<Problem> problems = problemService.getProblems(loginUser, id, pageSize, pageNum);
         List<ProblemVo> problemVos = BeanUtil.copyToList(problems, ProblemVo.class);
-        ProblemSetsProblemVo resp = new ProblemSetsProblemVo(total, problemVos);
+        ProblemListVo resp = new ProblemListVo(total, problemVos);
         return ResultUtils.success(resp);
     }
 
-    @PostMapping("/edit/problem")
+    @PostMapping("/add/problem")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
-    public BaseResponse editProblemsSetsProblem(HttpServletRequest req) {
-
+    public BaseResponse addProblemsSetsProblem(@RequestBody EditSetsProblemRequest edit, HttpServletRequest req) {
+        User loginUser = userService.getLoginUser(req);
+        problemService.setsAddProblem(edit, loginUser);
         return ResultUtils.success(null);
     }
 
+    @PostMapping("/del/problem")
+    @AuthCheck(mustRole = AuthEnum.TEACHER)
+    public BaseResponse delProblemSetsProblem(@RequestBody EditSetsProblemRequest edit, HttpServletRequest req) {
+        User loginUser = userService.getLoginUser(req);
+        problemService.setsDelProblem(edit, loginUser);
+        return ResultUtils.success(null);
+    }
 }

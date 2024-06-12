@@ -10,4 +10,8 @@ public interface ProblemSetsProblemMapper {
     int getProblemsTotal(long problemSetsId);
 
     List<Problem> getProblems(long problemSetsId, int limit, int offSet);
+
+    void addProblem(long problemSetsId, long problemId);
+
+    void delProblem(long problemSetsId, long problemId);
 }

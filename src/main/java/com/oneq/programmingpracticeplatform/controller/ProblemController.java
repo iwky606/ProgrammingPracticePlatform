@@ -13,6 +13,7 @@ import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.enums.JudgeStatus;
 import com.oneq.programmingpracticeplatform.model.enums.Language;
+import com.oneq.programmingpracticeplatform.model.vo.ProblemListVo;
 import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
 import com.oneq.programmingpracticeplatform.model.vo.SubmissionVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
@@ -97,4 +98,9 @@ public class ProblemController {
         return ResultUtils.success(resp);
     }
 
+    @GetMapping("/list")
+    public BaseResponse<ProblemListVo> getProblemList() {
+        problemService.getAllProblems();
+        return null;
+    }
 }

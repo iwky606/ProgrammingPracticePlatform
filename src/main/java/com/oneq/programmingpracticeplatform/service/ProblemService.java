@@ -4,12 +4,12 @@ import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest;
 import com.oneq.programmingpracticeplatform.model.dto.problem.JudgeResult;
 import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsInfoRequest;
+import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsProblemRequest;
 import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
 import com.oneq.programmingpracticeplatform.model.enums.JudgeStatus;
 import com.oneq.programmingpracticeplatform.model.enums.Language;
-import io.swagger.models.auth.In;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -31,9 +31,15 @@ public interface ProblemService {
 
     long createProblemSets(User user);
 
-    void editProblemSets(EditSetsInfoRequest problemSets,User user);
+    void editProblemSets(EditSetsInfoRequest problemSets, User user);
 
-    List<Problem> getProblems(User user,long problemSetsId, int pageSize, int pageNum);
+    List<Problem> getProblems(User user, long problemSetsId, int pageSize, int pageNum);
 
     Integer getProblemsSetsTotal(long problemSetsId);
+
+    List<Problem> getAllProblems();
+
+    void setsAddProblem(EditSetsProblemRequest edit, User req);
+
+    void setsDelProblem(EditSetsProblemRequest edit, User req);
 }

@@ -21,4 +21,6 @@ public interface ProblemMapper {
     Problem getProblemInputDetail(long id);
 
     Problem getProblemJudgeInfo(long submissionId);
+
+    int hasProblem(long problemId);
 }

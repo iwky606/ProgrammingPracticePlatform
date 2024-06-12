@@ -12,6 +12,8 @@ import com.oneq.programmingpracticeplatform.mapper.SubmissionMapper;
 import com.oneq.programmingpracticeplatform.model.dto.SubmissionReq;
 import com.oneq.programmingpracticeplatform.model.dto.problem.*;
 import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsInfoRequest;
+import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsProblemRequest;
+import com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets;
 import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.JudgeConfig;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
@@ -24,12 +26,15 @@ import com.oneq.programmingpracticeplatform.service.FileService;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -239,18 +244,21 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public void editProblemSets(EditSetsInfoRequest problemSets, User user) {
-
-        // problemSetsMapper.editProblemSetsInfo(problemSets);
+    public void editProblemSets(EditSetsInfoRequest req, User user) {
+        Long creator = getProblemSetsCreator(req.getId());
+        if (!user.getAuth().equals(AuthEnum.ADMIN)) {
+            if (user.getId() != creator) {
+                throw new BusinessException(ErrorCode.FORBIDDEN_ERROR, "没有权限修改该题目");
+            }
+        }
+        ProblemSets problemSets = new ProblemSets();
+        BeanUtil.copyProperties(req, problemSets);
+        problemSetsMapper.editProblemSetsInfo(problemSets);
     }
 
+    @Cache(key = "sets.creator", expire = 5, timeUnit = TimeUnit.MINUTES)
     public Long getProblemSetsCreator(long problemSetsId) {
-        String key = "sets.creator." + problemSetsId;
-        Object o = redisTemplate.opsForValue().get(key);
         Long creator = problemSetsMapper.getCreator(problemSetsId);
-        if (creator == null) {
-            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "未能找到题目");
-        }
         return creator;
     }
 
@@ -267,6 +275,30 @@ public class ProblemServiceImpl implements ProblemService {
     public Integer getProblemsSetsTotal(long problemSetsId) {
         int total = problemSetsProblemMapper.getProblemsTotal(problemSetsId);
         return total;
+    }
+
+    @Override
+    public List<Problem> getAllProblems() {
+        // TODO:
+        return null;
+    }
+
+    @Override
+    public void setsAddProblem(EditSetsProblemRequest edit, User req) {
+        int count = problemMapper.hasProblem(edit.getProblemId());
+        if (count == 0) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR, "无效的题目id");
+        }
+        try {
+            problemSetsProblemMapper.addProblem(edit.getProblemSetsId(), edit.getProblemId());
+        } catch (DuplicateKeyException e) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "已经添加了这个题目");
+        }
+    }
+
+    @Override
+    public void setsDelProblem(EditSetsProblemRequest edit, User req) {
+        problemSetsProblemMapper.delProblem(edit.getProblemSetsId(),edit.getProblemId());
     }
 
     public void updateSubmission(Submission submission) {

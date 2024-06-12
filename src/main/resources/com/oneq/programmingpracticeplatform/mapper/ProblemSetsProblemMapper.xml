@@ -3,6 +3,16 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oneq.programmingpracticeplatform.mapper.ProblemSetsProblemMapper">
+    <insert id="addProblem">
+        INSERT INTO problem_sets_problem (problem_sets_id, problem_id)
+        VALUES (#{problemSetsId}, #{problemId})
+    </insert>
+    <delete id="delProblem">
+        DELETE
+        FROM problem_sets_problem
+        WHERE problem_sets_id = #{problemSetsId}
+          AND problem_id = #{problemId}
+    </delete>
     <select id="getProblemsTotal" resultType="java.lang.Integer">
         select count(1)
         from problem_sets_problem

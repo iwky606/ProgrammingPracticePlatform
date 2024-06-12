@@ -3,16 +3,32 @@
 ## DDL
 
 ```SQL
-create table files
+create table submission
 (
-   id          int auto_increment
+   id              bigint  not null comment '提交记录id'
       primary key,
-   uploader    bigint       null comment '上传的用户id',
-   upload_time bigint       null comment '上传的时间戳',
-   file_name   varchar(255) not null,
-   data        longblob     not null
-)
-   collate = utf8mb4_unicode_ci;
+   problem_id      bigint  not null comment '题目id',
+   user_id         bigint  not null comment '用户id',
+   code            text    null comment '用户提交的代码',
+   lang            tinyint not null comment '1:java8,2:java17,3:cpp20,4:python3.8',
+   submission_time bigint  null comment '提交题目时间戳',
+   status          tinyint null comment '枚举类型，提交状态，枚举内容看表头注释',
+   exec_time       int     null comment '执行时间(ms)',
+   exec_memory     int     null comment '消耗内存(kb)',
+   problem_sets_id bigint  null comment '属于那个题目集的提交'
+);
+
+create index problem_id
+   on submission (problem_id);
+
+create index problem_sets_id
+   on submission (problem_sets_id);
+
+create index user_id
+   on submission (user_id);
+
+create index user_id_2
+   on submission (user_id, problem_id);
 
 create table problem
 (
@@ -36,6 +52,18 @@ create table problem
 
 create index create_user
    on problem (creator);
+
+
+create table files
+(
+   id          int auto_increment
+      primary key,
+   uploader    bigint       null comment '上传的用户id',
+   upload_time bigint       null comment '上传的时间戳',
+   file_name   varchar(255) not null,
+   data        longblob     not null
+)
+   collate = utf8mb4_unicode_ci;
 
 create table problem_sets
 (
@@ -74,33 +102,6 @@ create table problem_sets_users
 
 create index problem_sets_id
    on problem_sets_users (problem_sets_id);
-
-create table submission
-(
-   id              bigint  not null comment '提交记录id'
-      primary key,
-   problem_id      bigint  not null comment '题目id',
-   user_id         bigint  not null comment '用户id',
-   code            text    null comment '用户提交的代码',
-   lang            tinyint not null comment '1:java8,2:java17,3:cpp20,4:python3.8',
-   submission_time bigint  null comment '提交题目时间戳',
-   status          tinyint null comment '枚举类型，提交状态，枚举内容看表头注释',
-   exec_time       int     null comment '执行时间(ms)',
-   exec_memory     int     null comment '消耗内存(kb)',
-   problem_sets_id bigint  null comment '属于那个题目集的提交'
-);
-
-create index problem_id
-   on submission (problem_id);
-
-create index problem_sets_id
-   on submission (problem_sets_id);
-
-create index user_id
-   on submission (user_id);
-
-create index user_id_2
-   on submission (user_id, problem_id);
 
 create table users
 (

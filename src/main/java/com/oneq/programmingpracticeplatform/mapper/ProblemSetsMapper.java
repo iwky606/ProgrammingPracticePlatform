@@ -10,4 +10,6 @@ public interface ProblemSetsMapper {
     void editProblemSetsInfo(ProblemSets problemSets);
 
     Long getCreator(long problemSetsId);
+
+    ProblemSets getProblemSetsDetail(long id);
 }

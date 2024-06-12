@@ -3,6 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oneq.programmingpracticeplatform.mapper.ProblemSetsMapper">
+    <resultMap id="ProblemSetsMap" type="com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets">
+        <result column="info" property="info"
+                typeHandler="com.oneq.programmingpracticeplatform.typehandler.prolemsetshandler.SetsInfoTypeHandler"/>
+    </resultMap>
+
     <insert id="createProblemSets">
         INSERT INTO problem_sets (id, create_user, create_time, update_time)
         values (#{id}, #{createUser}, #{createTime}, #{updateTime})
@@ -26,5 +31,12 @@
         SELECT create_user
         FROM problem_sets
         WHERE id = #{problemSetsId}
+    </select>
+    <select id="getProblemSetsDetail"
+            resultMap="ProblemSetsMap"
+            resultType="com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets">
+        SELECT *
+        FROM problem_sets
+        WHERE id=#{id}
     </select>
 </mapper>

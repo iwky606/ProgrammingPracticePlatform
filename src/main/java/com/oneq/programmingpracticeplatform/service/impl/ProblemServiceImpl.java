@@ -239,6 +239,8 @@ public class ProblemServiceImpl implements ProblemService {
         }
         ProblemSets problemSets = new ProblemSets();
         BeanUtil.copyProperties(req, problemSets);
+        long now = System.currentTimeMillis();
+        problemSets.setUpdateTime(now);
         problemSetsMapper.editProblemSetsInfo(problemSets);
     }
 
@@ -280,11 +282,22 @@ public class ProblemServiceImpl implements ProblemService {
         } catch (DuplicateKeyException e) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "已经添加了这个题目");
         }
+        expireSetsTotalCache(edit.getProblemSetsId());
+    }
+
+    public void expireSetsTotalCache(long id) {
+        redisTemplate.expire("sets.total." + id, 0, TimeUnit.SECONDS);
     }
 
     @Override
     public void setsDelProblem(EditSetsProblemRequest edit, User req) {
         problemSetsProblemMapper.delProblem(edit.getProblemSetsId(), edit.getProblemId());
+        expireSetsTotalCache(edit.getProblemSetsId());
+    }
+
+    @Override
+    public ProblemSets getProblemSetsDetail(long id) {
+        return problemSetsMapper.getProblemSetsDetail(id);
     }
 
     public void updateSubmission(Submission submission) {

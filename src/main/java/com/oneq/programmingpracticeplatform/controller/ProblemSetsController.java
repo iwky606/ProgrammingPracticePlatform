@@ -7,12 +7,15 @@ import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsInfoRequest;
 import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsProblemRequest;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
+import com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets;
 import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.ProblemListVo;
+import com.oneq.programmingpracticeplatform.model.vo.ProblemSetsVO;
 import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -21,6 +24,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/problem_sets")
+@Slf4j
 public class ProblemSetsController {
     @Resource
     private ProblemService problemService;
@@ -44,13 +48,29 @@ public class ProblemSetsController {
         return ResultUtils.success(null);
     }
 
-    @GetMapping("/problems")
-    public BaseResponse<ProblemListVo> getProblems(@RequestParam long id, int pageSize, int pageNum, HttpServletRequest req) {
+    @GetMapping("/detail")
+    public BaseResponse<ProblemSetsVO> getSetsDetail(@RequestParam long id, int pageSize, int pageNum, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
+        // 获取题目集的题目总数
         int total = problemService.getProblemsSetsTotal(id);
+
+        // 获取题目id列表
         List<Problem> problems = problemService.getProblems(loginUser, id, pageSize, pageNum);
         List<ProblemVo> problemVos = BeanUtil.copyToList(problems, ProblemVo.class);
-        ProblemListVo resp = new ProblemListVo(total, problemVos);
+        ProblemListVo problemList = new ProblemListVo(total, problemVos);
+
+        // 获取题目集详情
+        ProblemSetsVO resp = new ProblemSetsVO();
+        ProblemSets problemSets = problemService.getProblemSetsDetail(id);
+        long now = System.currentTimeMillis();
+        if (problemSets.getOpenTime() > now && loginUser.getAuth().equals(AuthEnum.STUDENT)) {
+            resp.setInfo(problemSets.getInfo());
+            resp.setOpenTime(problemSets.getOpenTime());
+            resp.setEndTime(problemSets.getEndTime());
+        } else {
+            BeanUtil.copyProperties(problemSets, resp);
+            resp.setProblemList(problemList);
+        }
         return ResultUtils.success(resp);
     }
 
@@ -69,4 +89,5 @@ public class ProblemSetsController {
         problemService.setsDelProblem(edit, loginUser);
         return ResultUtils.success(null);
     }
+
 }

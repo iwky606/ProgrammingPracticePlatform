@@ -5,6 +5,7 @@ import com.oneq.programmingpracticeplatform.model.dto.problem.EditProblemRequest
 import com.oneq.programmingpracticeplatform.model.dto.problem.JudgeResult;
 import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsInfoRequest;
 import com.oneq.programmingpracticeplatform.model.dto.problemsets.EditSetsProblemRequest;
+import com.oneq.programmingpracticeplatform.model.entity.problemsets.ProblemSets;
 import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.submission.Submission;
@@ -42,4 +43,6 @@ public interface ProblemService {
     void setsAddProblem(EditSetsProblemRequest edit, User req);
 
     void setsDelProblem(EditSetsProblemRequest edit, User req);
+
+    ProblemSets getProblemSetsDetail(long id);
 }

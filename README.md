@@ -53,6 +53,7 @@ create table problem
 create index create_user
    on problem (creator);
 
+create index id_open_time on problem (id,open_time);
 
 create table files
 (

@@ -142,7 +142,9 @@ public class ProblemServiceImpl implements ProblemService {
         ResourceLimit resourceLimit = new ResourceLimit();
         BeanUtil.copyProperties(problemDetail.getJudgeConfig(), resourceLimit);
         JudgeTask judgeTask = new JudgeTask(submission.getId(), filesByIds, submission.getCode(), submission.getLang(), resourceLimit, null);
+
         rabbitTemplate.convertAndSend("judge.queue", judgeTask);
+
         return submissionId;
     }
 

@@ -19,6 +19,15 @@ spring:
     listener:
       simple:
         prefetch: 1
+        concurrency: 1 # 配置消费者数量
+        max-concurrency: 5 # 根据硬件情况配置
+      direct:
+        retry:
+          enabled: true
+          max-attempts: 2
+          max-interval: 500ms
+    connection-timeout: 500ms
+
   redis:
     host: 127.0.0.1
     port: 6379

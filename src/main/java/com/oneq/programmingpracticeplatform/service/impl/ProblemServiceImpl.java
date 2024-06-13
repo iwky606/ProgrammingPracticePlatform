@@ -156,6 +156,7 @@ public class ProblemServiceImpl implements ProblemService {
         submission.setStatus(JudgeStatus.ACCEPT);
         submission.setExecTime(0);
         submission.setExecMemory(0);
+        submission.setJudgeSystemId(judgeResult.getJudgeSystemId());
         if (!judgeResult.getJudgeStatus().equals(JudgeStatus.NORMAL)) {
             // 说明程序未完全执行
             submission.setStatus(judgeResult.getJudgeStatus());

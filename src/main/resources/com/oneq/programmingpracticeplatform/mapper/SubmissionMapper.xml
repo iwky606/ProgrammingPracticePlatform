@@ -18,7 +18,8 @@
         UPDATE submission
         SET status=#{status,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.JudgeStatusTypeHandler},
             exec_time=#{execTime},
-            exec_memory=#{execMemory}
+            exec_memory=#{execMemory},
+            judge_system_id=#{judgeSystemId}
         WHERE id = #{id}
     </update>
     <select id="getSubmissions"

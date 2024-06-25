@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
     private static final String SALT = "oneqxowikdj.";
 
     @Override
-    public void userRegister(String username, String password, String checkPassword, int auth) {
-        if (auth <= 0) {
+    public void userRegister(String username, String password, String checkPassword, AuthEnum auth) {
+        if (auth.getValue() < 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户权限为空");
         }
         // 1. 校验
@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
             User user = new User();
             user.setUsername(username);
             user.setPassword(encryptPassword);
-            user.setAuth(EnumUtil.getEnumByValue(AuthEnum.class, auth));
+            user.setAuth(auth);
             long timestamp = System.currentTimeMillis();
             user.setCreateTime(timestamp);
             user.setUpdateTime(timestamp);

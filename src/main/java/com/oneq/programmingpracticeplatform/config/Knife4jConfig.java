@@ -20,7 +20,7 @@ public class Knife4jConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(new ApiInfoBuilder()
                         .title("接口文档")
-                        .description("yuoj-backend")
+                        .description("程序设计实践平台文档")
                         .version("1.0")
                         .build())
                 .select()

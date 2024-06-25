@@ -6,16 +6,15 @@ import com.oneq.programmingpracticeplatform.common.BaseResponse;
 import com.oneq.programmingpracticeplatform.common.ErrorCode;
 import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
-import com.oneq.programmingpracticeplatform.mapper.UserMapper;
 import com.oneq.programmingpracticeplatform.model.dto.user.UserLoginRequest;
 import com.oneq.programmingpracticeplatform.model.dto.user.UserRegisterRequest;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.UserService;
 import com.oneq.programmingpracticeplatform.util.EnumUtil;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,6 +27,7 @@ public class UserController {
     @Resource
     UserService userService;
 
+    @ApiOperation(value = "注册", notes = "")
     @PostMapping("/register")
     public BaseResponse<Object> RegisterUser(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
@@ -36,11 +36,11 @@ public class UserController {
         String username = userRegisterRequest.getUsername();
         String userPassword = userRegisterRequest.getPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
-        int auth = userRegisterRequest.getAuth();
+        // int auth = userRegisterRequest.getAuth();
         if (StringUtils.isAnyBlank(username, userPassword, checkPassword)) {
             return null;
         }
-        userService.userRegister(username, userPassword, checkPassword, auth);
+        userService.userRegister(username, userPassword, checkPassword, userRegisterRequest.getAuth());
         return ResultUtils.success(null);
     }
 

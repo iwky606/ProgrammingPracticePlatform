@@ -7,7 +7,7 @@ import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import javax.servlet.http.HttpServletRequest;
 
 public interface UserService {
-    void userRegister(String username, String password, String checkPassword, int auth);
+    void userRegister(String username, String password, String checkPassword, AuthEnum auth);
 
     UserVo login(String username, String userPassword, HttpServletRequest request);
 

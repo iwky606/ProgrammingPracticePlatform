@@ -8,7 +8,7 @@ spring:
       matching-strategy: ant_path_matcher
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/pppd?serverTimezone=UTC
-    username: root
+    username: user_pppd
     password: 123456
   rabbitmq:
     host: 127.0.0.1

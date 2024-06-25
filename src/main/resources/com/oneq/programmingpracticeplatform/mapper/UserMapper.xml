@@ -12,7 +12,9 @@
 
     <insert id="insertUser" parameterType="com.oneq.programmingpracticeplatform.model.entity.user.User">
         INSERT INTO users (id, username, password, auth, create_time, update_time)
-        VALUES (#{id}, #{username}, #{password}, #{auth}, #{createTime}, #{updateTime})
+        VALUES (#{id}, #{username}, #{password},
+                #{auth,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.AuthTypeHandler},
+                #{createTime}, #{updateTime})
     </insert>
     <update id="updateUserAuth">
         UPDATE users SET auth=#{auth} WHERE username=#{username};

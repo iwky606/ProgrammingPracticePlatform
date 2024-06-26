@@ -71,7 +71,7 @@ public class ProblemController {
     // }
 
     @PostMapping("/submit")
-    @ApiOperation(value = "提交代码接口")
+    @ApiOperation(value = "提交代码接口, 返回submission_id")
     public BaseResponse<Long> submitCode(@RequestBody SubmissionReq submission, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
         long submissionId = problemService.submitCode(submission, loginUser);

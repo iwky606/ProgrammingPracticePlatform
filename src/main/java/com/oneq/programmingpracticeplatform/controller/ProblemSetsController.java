@@ -15,6 +15,7 @@ import com.oneq.programmingpracticeplatform.model.vo.ProblemSetsVO;
 import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,7 @@ public class ProblemSetsController {
     private UserService userService;
 
     @PostMapping("/create")
+    @ApiOperation(value = "创建题目集，返回题目集id")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
     public BaseResponse<Long> createProblemSets(HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
@@ -42,6 +44,7 @@ public class ProblemSetsController {
     }
 
     @GetMapping("/sets_lists")
+    @ApiOperation(value = "获取题目集列表")
     public BaseResponse<List<ProblemSetsVO>> getProblemSetsList(@RequestParam int pageSize, int pageNum) {
         List<ProblemSets> problemSets = problemService.getAllProblemSets(pageSize, pageNum);
         List<ProblemSetsVO> problemSetsVOS = BeanUtil.copyToList(problemSets, ProblemSetsVO.class);
@@ -49,6 +52,7 @@ public class ProblemSetsController {
     }
 
     @PostMapping("/edit/info")
+    @ApiOperation(value = "编辑题目集的基本信息（不包含题目）")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
     public BaseResponse editProblemSetsInfo(EditSetsInfoRequest editSetsInfo, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
@@ -57,6 +61,7 @@ public class ProblemSetsController {
     }
 
     @GetMapping("/detail")
+    @ApiOperation(value = "获取题目集的详情")
     public BaseResponse<ProblemSetsVO> getSetsDetail(@RequestParam long id, int pageSize, int pageNum, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
         // 获取题目集的题目总数
@@ -83,6 +88,7 @@ public class ProblemSetsController {
     }
 
     @PostMapping("/add/problem")
+    @ApiOperation(value = "给题目集添加一个题目")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
     public BaseResponse addProblemsSetsProblem(@RequestBody EditSetsProblemRequest edit, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
@@ -91,6 +97,7 @@ public class ProblemSetsController {
     }
 
     @PostMapping("/del/problem")
+    @ApiOperation(value = "给题目集删除一个题目")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
     public BaseResponse delProblemSetsProblem(@RequestBody EditSetsProblemRequest edit, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);

@@ -47,7 +47,7 @@ public class UserController {
                 throw new BusinessException(ErrorCode.PARAMS_ERROR, "admin账户注册非法");
             }
         } else if (AuthEnum.TEACHER.equals(userRegisterRequest.getAuth())) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"教师账户由管理员授权，禁止注册");
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "教师账户由管理员授权，禁止注册");
         }
         if (StringUtils.isAnyBlank(username, userPassword, checkPassword)) {
             return null;
@@ -57,6 +57,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
+    @ApiOperation(value = "登录")
     public BaseResponse<UserVo> Login(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
         if (userLoginRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -78,6 +79,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
+    @ApiOperation(value = "退出登录")
     @LoginRequired
     public BaseResponse logout(HttpServletRequest req) {
         userService.logout(req);

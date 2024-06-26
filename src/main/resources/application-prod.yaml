@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: ProgrammingPracticePlatform
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/pppd?serverTimezone=UTC
+    username: user_pppd
+    password: 1234567
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    virtual-host: /SandboxService
+    username: SandboxService
+    password: 123456
+    listener:
+      simple:
+        prefetch: 1
+        concurrency: 1 # 配置消费者数量
+        max-concurrency: 5 # 根据硬件情况配置
+      direct:
+        retry:
+          enabled: true
+          max-attempts: 2
+          max-interval: 500ms
+    connection-timeout: 500ms
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  config:
+    activate:
+      on-profile: prod
+
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+admin_key: "admin-key"

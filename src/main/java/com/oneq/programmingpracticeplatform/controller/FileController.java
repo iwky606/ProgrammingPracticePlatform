@@ -9,6 +9,7 @@ import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.service.FileService;
 import com.oneq.programmingpracticeplatform.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ public class FileController {
 
     @PostMapping("/problem/judge_file")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
+    @ApiOperation(value = "上传输入样例", notes = "")
     public BaseResponse<Integer> handleFileUpload(@RequestParam("file") MultipartFile file, HttpServletRequest req) {
         if (file.isEmpty()) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "文件为空");

@@ -18,6 +18,8 @@ import com.oneq.programmingpracticeplatform.model.vo.ProblemVo;
 import com.oneq.programmingpracticeplatform.model.vo.SubmissionVo;
 import com.oneq.programmingpracticeplatform.service.ProblemService;
 import com.oneq.programmingpracticeplatform.service.UserService;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +41,7 @@ public class ProblemController {
      * 返回problem_id
      * */
     @PostMapping("/create")
+    @ApiOperation(value = "创建题目，返回题目id", notes = "")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
     public BaseResponse<Long> createProblem(HttpServletRequest request) {
         long id = problemService.createProblem(request);
@@ -46,6 +49,7 @@ public class ProblemController {
     }
 
     @PostMapping("/edit")
+    @ApiOperation(value = "编辑题目", notes = "")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
     public BaseResponse<Long> editProblem(@RequestBody EditProblemRequest editProblemRequest) {
         long id = problemService.updateProblem(editProblemRequest);
@@ -53,19 +57,21 @@ public class ProblemController {
     }
 
     @GetMapping("/detail")
+    @ApiOperation(value = "获取题目详情", notes = "教师，admin和学生看到的详情不一样")
     public BaseResponse<ProblemVo> getProblem(@RequestParam long id, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
         Problem problemDetail = problemService.getProblemDetail(id, loginUser);
         return ResultUtils.success(ProblemVo.objToVo(problemDetail));
     }
 
-    @GetMapping("/problems")
-    public BaseResponse<List<ProblemVo>> getProblems(Long problemSetsId) {
-        log.info(problemSetsId + "");
-        return null;
-    }
+    // @GetMapping("/problems")
+    // public BaseResponse<List<ProblemVo>> getProblems(Long problemSetsId) {
+    //     log.info(problemSetsId + "");
+    //     return null;
+    // }
 
     @PostMapping("/submit")
+    @ApiOperation(value = "提交代码接口")
     public BaseResponse<Long> submitCode(@RequestBody SubmissionReq submission, HttpServletRequest req) {
         User loginUser = userService.getLoginUser(req);
         long submissionId = problemService.submitCode(submission, loginUser);
@@ -74,6 +80,7 @@ public class ProblemController {
 
     // @formatter:off
     @GetMapping("/submissions")
+    @ApiOperation(value = "提交列表")
     public BaseResponse<List<SubmissionVo>> getSubmissionList(
             @RequestParam(value = "problemId", required = false) Long problemId,
             @RequestParam(value = "problemSetId", required = false) Long problemSetId,
@@ -88,6 +95,7 @@ public class ProblemController {
     // @formatter:on
 
     @GetMapping("/submission/detail")
+    @ApiOperation(value = "提交详情")
     @LoginRequired
     public BaseResponse<SubmissionVo> getSubmissionDetail(@RequestParam long id, HttpServletRequest req) {
         User user = userService.getLoginUser(req);
@@ -97,9 +105,9 @@ public class ProblemController {
         return ResultUtils.success(resp);
     }
 
-    @GetMapping("/list")
-    public BaseResponse<ProblemListVo> getProblemList() {
-        problemService.getAllProblems();
-        return null;
-    }
+    // @GetMapping("/list")
+    // public BaseResponse<ProblemListVo> getProblemList() {
+    //     problemService.getAllProblems();
+    //     return null;
+    // }
 }

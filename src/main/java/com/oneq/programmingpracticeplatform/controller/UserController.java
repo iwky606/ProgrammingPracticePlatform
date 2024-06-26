@@ -65,6 +65,7 @@ public class UserController {
         return ResultUtils.success(userVo);
     }
 
+    @ApiOperation(value = "权限修改（仅仅admin账户可以使用）", notes = "")
     @PostMapping("/grantAuth")
     @AuthCheck(mustRole = AuthEnum.ADMIN)
     public BaseResponse<String> grantAuth(String username, int auth) {

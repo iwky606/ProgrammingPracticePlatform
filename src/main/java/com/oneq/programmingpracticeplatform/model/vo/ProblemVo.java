@@ -1,6 +1,5 @@
 package com.oneq.programmingpracticeplatform.model.vo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.oneq.programmingpracticeplatform.model.entity.problem.JudgeConfig;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import com.oneq.programmingpracticeplatform.model.entity.problem.ProblemDescription;

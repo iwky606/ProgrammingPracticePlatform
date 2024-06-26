@@ -3,6 +3,8 @@ package com.oneq.programmingpracticeplatform.mapper;
 import com.oneq.programmingpracticeplatform.model.entity.problem.Problem;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface ProblemMapper {
 
@@ -21,4 +23,8 @@ public interface ProblemMapper {
     Problem getProblemWithoutAuth(Long id, long now);
 
     void updateProblemDurationTime(Problem problem,long problemSetsId);
+
+    List<Problem> getAllProblems(int offSet, int limit);
+
+    List<Problem> getAllPublicProblems(int offSet, int limit);
 }

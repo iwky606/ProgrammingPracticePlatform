@@ -135,5 +135,21 @@
         WHERE id = #{id}
           AND open_time &lt; #{now}
     </select>
+    <select id="getAllProblems" resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
+        SELECT id, title
+        FROM problem
+        ORDER BY id ASC
+            LIMIT #{limit}
+        OFFSET #{offSet}
+    </select>
+    <select id="getAllPublicProblems"
+            resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem">
+        SELECT id, title
+        FROM problem
+        WHERE visible = 1
+        ORDER BY id ASC
+            LIMIT #{limit}
+        OFFSET #{offSet}
+    </select>
 
 </mapper>

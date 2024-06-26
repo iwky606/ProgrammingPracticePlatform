@@ -64,11 +64,14 @@ public class ProblemController {
         return ResultUtils.success(ProblemVo.objToVo(problemDetail));
     }
 
-    // @GetMapping("/problems")
-    // public BaseResponse<List<ProblemVo>> getProblems(Long problemSetsId) {
-    //     log.info(problemSetsId + "");
-    //     return null;
-    // }
+    @GetMapping("/problems")
+    @ApiOperation(value = "获取所有题目")
+    public BaseResponse<List<ProblemVo>> getProblems(@RequestParam int pageNum, @RequestParam int pageSize, HttpServletRequest req) {
+        User loginUser = userService.getLoginUser(req);
+        List<Problem> allProblems = problemService.getAllProblems(pageNum, pageSize, loginUser);
+        List<ProblemVo> problemVos = BeanUtil.copyToList(allProblems, ProblemVo.class);
+        return ResultUtils.success(problemVos);
+    }
 
     @PostMapping("/submit")
     @ApiOperation(value = "提交代码接口, 返回submission_id")
@@ -105,9 +108,4 @@ public class ProblemController {
         return ResultUtils.success(resp);
     }
 
-    // @GetMapping("/list")
-    // public BaseResponse<ProblemListVo> getProblemList() {
-    //     problemService.getAllProblems();
-    //     return null;
-    // }
 }

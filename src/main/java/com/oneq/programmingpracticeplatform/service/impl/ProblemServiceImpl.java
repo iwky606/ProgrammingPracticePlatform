@@ -281,9 +281,19 @@ public class ProblemServiceImpl implements ProblemService {
     }
 
     @Override
-    public List<Problem> getAllProblems() {
+    public List<Problem> getAllProblems(int pageNum, int pageSize, User user) {
+        int offSet = (pageNum - 1) * pageSize;
+        int limit = pageSize;
         // TODO:
-        return null;
+        if (user == null) {
+            return problemMapper.getAllPublicProblems(offSet, limit);
+        }
+        if (AuthEnum.TEACHER.equals(user.getAuth()) || AuthEnum.ADMIN.equals(user.getAuth())) {
+            return problemMapper.getAllProblems(offSet, limit);
+        } else {
+            return problemMapper.getAllPublicProblems(offSet, limit);
+
+        }
     }
 
     @Override

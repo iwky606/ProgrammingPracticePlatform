@@ -15,6 +15,7 @@ import com.oneq.programmingpracticeplatform.util.EnumUtil;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,6 +28,9 @@ public class UserController {
     @Resource
     UserService userService;
 
+    @Value("${admin_key}")
+    private String adminKey;
+
     @ApiOperation(value = "注册", notes = "")
     @PostMapping("/register")
     public BaseResponse<Object> RegisterUser(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -36,7 +40,15 @@ public class UserController {
         String username = userRegisterRequest.getUsername();
         String userPassword = userRegisterRequest.getPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
-        // int auth = userRegisterRequest.getAuth();
+        if (AuthEnum.ADMIN.equals(userRegisterRequest.getAuth())) {
+            String inputAdminKey = userRegisterRequest.getAdminKey();
+            log.info("admin key:{}, {}", userRegisterRequest.getAdminKey(), adminKey);
+            if (StringUtils.isBlank(inputAdminKey) || !adminKey.equals(inputAdminKey)) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "admin账户注册非法");
+            }
+        } else if (AuthEnum.TEACHER.equals(userRegisterRequest.getAuth())) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR,"教师账户由管理员授权，禁止注册");
+        }
         if (StringUtils.isAnyBlank(username, userPassword, checkPassword)) {
             return null;
         }

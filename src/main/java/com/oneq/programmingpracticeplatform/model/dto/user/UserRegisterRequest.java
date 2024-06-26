@@ -20,5 +20,9 @@ public class UserRegisterRequest implements Serializable {
     private String checkPassword;
 
     private AuthEnum auth;
+
+    @ApiModelProperty(value = "用于注册admin账户")
+    private String adminKey;
+
     private static final long serialVersionUID = 1L;
 }

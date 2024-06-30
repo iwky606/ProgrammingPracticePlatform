@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
     private static final String SALT = "oneqxowikdj.";
 
     @Override
-    public void userRegister(String username, String password, String checkPassword, AuthEnum auth) {
+    public UserVo userRegister(String username, String password, String checkPassword, AuthEnum auth,HttpServletRequest request) {
         if (auth.getValue() < 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户权限为空");
         }
@@ -66,6 +66,12 @@ public class UserServiceImpl implements UserService {
             if (rows == 0) {
                 throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");
             }
+            UserVo userVo=new UserVo();
+            userVo.setAuth(user.getAuth());
+            userVo.setId(user.getId());
+            userVo.setUsername(user.getUsername());
+            request.getSession().setAttribute(USER_LOGIN_STATE,user);
+            return userVo;
         }
     }
 

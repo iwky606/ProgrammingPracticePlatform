@@ -8,6 +8,7 @@ import com.oneq.programmingpracticeplatform.common.ResultUtils;
 import com.oneq.programmingpracticeplatform.exception.BusinessException;
 import com.oneq.programmingpracticeplatform.model.dto.user.UserLoginRequest;
 import com.oneq.programmingpracticeplatform.model.dto.user.UserRegisterRequest;
+import com.oneq.programmingpracticeplatform.model.entity.user.User;
 import com.oneq.programmingpracticeplatform.model.enums.AuthEnum;
 import com.oneq.programmingpracticeplatform.model.vo.UserVo;
 import com.oneq.programmingpracticeplatform.service.UserService;
@@ -33,7 +34,7 @@ public class UserController {
 
     @ApiOperation(value = "注册", notes = "")
     @PostMapping("/register")
-    public BaseResponse<Object> RegisterUser(@RequestBody UserRegisterRequest userRegisterRequest) {
+    public BaseResponse<UserVo> RegisterUser(@RequestBody UserRegisterRequest userRegisterRequest,HttpServletRequest request) {
         if (userRegisterRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
@@ -52,8 +53,9 @@ public class UserController {
         if (StringUtils.isAnyBlank(username, userPassword, checkPassword)) {
             return null;
         }
-        userService.userRegister(username, userPassword, checkPassword, userRegisterRequest.getAuth());
-        return ResultUtils.success(null);
+        UserVo userVo=userService.userRegister(username, userPassword, checkPassword, userRegisterRequest.getAuth(),request);
+
+        return ResultUtils.success(userVo);
     }
 
     @PostMapping("/login")

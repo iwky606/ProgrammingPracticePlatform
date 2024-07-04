@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface ProblemService {
-    long createProblem(HttpServletRequest request);
+    long createProblem(EditProblemRequest params,HttpServletRequest request);
 
     long updateProblem(EditProblemRequest editProblemRequest);
 
@@ -47,4 +47,6 @@ public interface ProblemService {
     ProblemSets getProblemSetsDetail(long id);
 
     List<ProblemSets> getAllProblemSets(int pageSize, int pageNum);
+
+    void delProblem(long id);
 }

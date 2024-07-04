@@ -60,11 +60,23 @@ public class ProblemServiceImpl implements ProblemService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public long createProblem(HttpServletRequest request) {
+    public long createProblem(EditProblemRequest params, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         long id = snowflake.nextId();
         long timestamp = System.currentTimeMillis();
-        int rowNums = problemMapper.createProblem(id, loginUser.getId(), timestamp, timestamp);
+        int rowNums = 0;
+        if (params == null) {
+            rowNums = problemMapper.createProblem(id, loginUser.getId(), timestamp, timestamp);
+        } else {
+            Problem problem = new Problem();
+            BeanUtil.copyProperties(params, problem);
+
+            problem.setId(id);
+            problem.setCreator(loginUser.getId());
+            problem.setCreateTime(timestamp);
+            problem.setUpdateTime(timestamp);
+            rowNums = problemMapper.createProblemWithParams(problem);
+        }
         if (rowNums == 0) {
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "创建题目失败");
         }
@@ -340,6 +352,11 @@ public class ProblemServiceImpl implements ProblemService {
     public List<ProblemSets> getAllProblemSets(int pageSize, int pageNum) {
         int offSet = (pageNum - 1) * pageSize;
         return problemSetsMapper.getAllProblemSetsList(offSet, pageSize);
+    }
+
+    @Override
+    public void delProblem(long id) {
+        problemMapper.delProblem(id);
     }
 
 

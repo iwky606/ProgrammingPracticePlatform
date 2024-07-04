@@ -27,4 +27,8 @@ public interface ProblemMapper {
     List<Problem> getAllProblems(int offSet, int limit);
 
     List<Problem> getAllPublicProblems(int offSet, int limit);
+
+    void delProblem(long id);
+
+    int createProblemWithParams(Problem problem);
 }

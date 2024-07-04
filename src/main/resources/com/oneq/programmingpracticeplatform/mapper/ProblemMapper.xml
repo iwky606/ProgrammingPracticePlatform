@@ -82,6 +82,59 @@
         WHERE problem_sets_id=#{problemSetsId}
         )
     </update>
+    <insert id="createProblemWithParams">
+        INSERT INTO problem
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id !=null">id,</if>
+            <if test="creator != null">creator,</if>
+            <if test="title != null">title,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="description != null">description,</if>
+            <if test="tags != null">tags,</if>
+            <if test="solution != null">solution,</if>
+            <if test="judgeConfig != null">judge_config,</if>
+            <if test="visible != null">visible,</if>
+            <if test="openTime != null">open_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="judgeInputs != null">judge_inputs,</if>
+            <if test="judgeOutputs != null">judge_outputs,</if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id !=null">#{id},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="title != null">#{title},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="description != null">
+                #{description,typeHandler=com.oneq.programmingpracticeplatform.typehandler.problemhandler.ProblemDescriptionTypeHandler},
+            </if>
+            <if test="tags != null">
+                #{tags,typeHandler=com.oneq.programmingpracticeplatform.typehandler.ListToJsonTypeHandler},
+            </if>
+            <if test="solution != null">
+                #{solution,typeHandler=com.oneq.programmingpracticeplatform.typehandler.problemhandler.ProblemSolutionTypeHandler},
+            </if>
+            <if test="judgeConfig != null">
+                #{judgeConfig,typeHandler=com.oneq.programmingpracticeplatform.typehandler.problemhandler.JudgeConfigTypeHandler},
+            </if>
+            <if test="visible != null">
+                #{visible,typeHandler=com.oneq.programmingpracticeplatform.typehandler.enumhandler.ProblemVisibleHandler},
+            </if>
+            <if test="judgeInputs != null">
+                #{judgeInputs,typeHandler=com.oneq.programmingpracticeplatform.typehandler.ListToJsonTypeHandler},
+            </if>
+            <if test="judgeOutputs != null">
+                #{judgeOutputs,typeHandler=com.oneq.programmingpracticeplatform.typehandler.ListToJsonTypeHandler},
+            </if>
+        </trim>
+    </insert>
+    <delete id="delProblem">
+        DELETE
+        FROM problem
+        WHERE id = #{id}
+    </delete>
 
     <select id="getProblemDetail"
             resultType="com.oneq.programmingpracticeplatform.model.entity.problem.Problem"

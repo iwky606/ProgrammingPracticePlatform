@@ -1,5 +1,14 @@
 # 程序设计实践平台(PPP)
 
+## Docker部署
+```bash
+docker build -t ppp:24.7.4 .
+```
+
+```bash
+docker run --name ppp -v /host/path:/container/path -p 8080:8080 ppp:24.7.4
+```
+
 ## DDL
 
 ```SQL

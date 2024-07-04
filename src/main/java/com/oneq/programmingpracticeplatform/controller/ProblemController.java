@@ -43,8 +43,8 @@ public class ProblemController {
     @PostMapping("/create")
     @ApiOperation(value = "创建题目，返回题目id", notes = "")
     @AuthCheck(mustRole = AuthEnum.TEACHER)
-    public BaseResponse<Long> createProblem(HttpServletRequest request) {
-        long id = problemService.createProblem(request);
+    public BaseResponse<Long> createProblem(@RequestBody(required = false) EditProblemRequest params, HttpServletRequest request) {
+        long id = problemService.createProblem(params,request);
         return ResultUtils.success(id);
     }
 
@@ -108,4 +108,19 @@ public class ProblemController {
         return ResultUtils.success(resp);
     }
 
+    @PostMapping("/del")
+    @ApiOperation(value = "删除题目")
+    @AuthCheck(mustRole = AuthEnum.TEACHER)
+    public BaseResponse delProblem(@RequestParam long id) {
+        problemService.delProblem(id);
+        return ResultUtils.success(null);
+    }
+
+    // @PostMapping("/create/detail")
+    // @ApiOperation(value = "创建题目携带默认参数")
+    // @AuthCheck(mustRole = AuthEnum.TEACHER)
+    // public BaseResponse<Long> createProblemWithParams(@RequestBody EditProblemRequest) {
+    //
+    //     return ResultUtils.success(1L);
+    // }
 }

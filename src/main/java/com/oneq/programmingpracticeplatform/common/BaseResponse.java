@@ -1,5 +1,7 @@
 package com.oneq.programmingpracticeplatform.common;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.oneq.programmingpracticeplatform.util.LongToStringSerializer;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,6 +14,7 @@ public class BaseResponse<T> implements Serializable {
 
     private int code;
 
+    // @JsonSerialize(using = LongToStringSerializer.class)
     private T data;
 
     private String message;

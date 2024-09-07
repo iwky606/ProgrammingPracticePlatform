@@ -19,7 +19,10 @@ public class JudgeResultConsumerImpl implements JudgeResultConsumer {
     @Override
     @RabbitListener(queues = "result.judge.queue")
     public void consumeMessage(JudgeResult message) {
+
+
         problemService.judgeSubmitResult(message);
+
     }
 
 }

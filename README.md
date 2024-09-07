@@ -6,7 +6,12 @@ docker build -t ppp:24.7.4 .
 ```
 
 ```bash
-docker run --name ppp -v /etc/localtime:/etc/localtime:ro -p 8080:8080 ppp:24.7.4
+docker run -d --name ppp -v /etc/localtime:/etc/localtime:ro -p 8080:8080 ppp:24.7.4
+```
+
+## rabbitmq docker
+```bash
+
 ```
 
 ## DDL

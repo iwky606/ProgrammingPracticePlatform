@@ -12,7 +12,7 @@ docker run --name ppp -v /etc/localtime:/etc/localtime:ro -p 8080:8080 ppp:24.7.
 ## DDL
 
 ```SQL
-create table pppd.submission
+create table submission
 (
    id              bigint        not null comment '提交记录id'
       primary key,
@@ -29,16 +29,16 @@ create table pppd.submission
 );
 
 create index problem_id
-   on pppd.submission (problem_id);
+   on submission (problem_id);
 
 create index problem_sets_id
-   on pppd.submission (problem_sets_id);
+   on submission (problem_sets_id);
 
 create index user_id
-   on pppd.submission (user_id);
+   on submission (user_id);
 
 create index user_id_2
-   on pppd.submission (user_id, problem_id);
+   on submission (user_id, problem_id);
 
 
 

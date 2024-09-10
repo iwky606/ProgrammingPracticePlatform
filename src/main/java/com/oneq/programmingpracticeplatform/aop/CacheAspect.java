@@ -8,6 +8,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +23,8 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class CacheAspect {
 
-    @Resource
+    @Autowired
+    @Qualifier("objectRedisTemplate")
     private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
